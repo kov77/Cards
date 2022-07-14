@@ -1,0 +1,9 @@
+
+
+.sidebarWrp {
+    background: red;
+    width: 10vw ;
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
