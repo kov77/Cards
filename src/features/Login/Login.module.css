@@ -1,0 +1,12 @@
+.signInWrp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.formWrp {
+    width: 300px;
+    height: 400px;
+}
+.rememberMeLabel {
+    color: gray;
+}

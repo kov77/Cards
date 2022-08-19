@@ -1,0 +1,10 @@
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.userInfo > div {
+    margin-top: 15px;
+}
