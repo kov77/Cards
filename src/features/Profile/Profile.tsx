@@ -10,12 +10,12 @@ import classes from "./Profile.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import { useEffect } from 'react';
-import {fetchUserTC, logoutTC} from "./profile-reducer";
+import {changeNameTC, fetchUserTC, logoutTC, setIsChecked} from "./profile-reducer";
 import {Navigate} from "react-router-dom";
-
+import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 export const Profile = () => {
-    const nameChecked = false
-    const name = useSelector((state: AppStateType) => state.profile.email).split("@")[0]
+    const isChecked = useSelector((state: AppStateType) => state.profile.isChecked)
+    const name = useSelector((state: AppStateType) => state.profile.name)
     const email = useSelector((state: AppStateType) => state.profile.email)
     const publicCardPacksCount = useSelector((state: AppStateType) => state.profile.publicCardPacksCount)
     const avatar = useSelector((state: AppStateType) => state.profile.avatar)
@@ -24,8 +24,10 @@ export const Profile = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        // @ts-ignore
-        dispatch(fetchUserTC())
+        if(isLoggedIn) {
+            // @ts-ignore
+            dispatch(fetchUserTC())
+        }
     }, [])
 
     const logoutBtnHandler = () => {
@@ -33,9 +35,25 @@ export const Profile = () => {
         dispatch(logoutTC())
     }
 
+    const isCheckedHandler = () => {
+        dispatch(setIsChecked({isChecked: true}))
+    }
+
+    const onChangeInputHandler = (e: any) => {
+        const name = e.currentTarget.value
+        // @ts-ignore
+        dispatch(changeNameTC({name}))
+    }
+
+    const inputChangeAvatarHandler = (e: any) => {
+        console.log(e.currentTarget)
+    }
+
+
     if(!isLoggedIn) {
         return <Navigate to="/login"/>
     }
+
     return (
         <Container component="main" maxWidth="xs">
             <Card sx={{minWidth: 275, display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 30px"}}>
@@ -43,13 +61,20 @@ export const Profile = () => {
                     <Typography variant="h5" component="div">
                         Personal Information
                     </Typography>
-                    <Avatar sx={{ width: 96, height: 96, mt: 2, mb: 3}} alt="Avatar" src={avatar} />
+                    <div className={classes.avatarWrp}>
+                        <Avatar sx={{ width: 96, height: 96, mt: 2, mb: 3}} alt="Avatar" src={avatar} />
+                        <label htmlFor="avatar" className={classes.label}><ModeEditOutlinedIcon/></label>
+                        <input onChange={e => inputChangeAvatarHandler(e)} style={{display: "none"}}type="file"
+                               id="avatar"
+                               name="avatar"
+                               accept="image/png, image/jpeg" />
+                    </div>
                     <div className={classes.userInfo}>
                         <div>
                             <label htmlFor="name"><span style={{fontWeight: "bold"}}>Name: </span> </label>
-                            {nameChecked ? <input type="text" name="name" id="name"/> : <span>{name}</span>}
+                            {isChecked ? <input onBlur={(e) => onChangeInputHandler(e)} type="text" name="name" id="name"/> : <span onDoubleClick={isCheckedHandler}>{name}</span>}
                         </div>
-                       <div ><span style={{fontWeight: "bold"}}>Email: </span> {email}</div>
+                       <div><span style={{fontWeight: "bold"}}>Email: </span> {email}</div>
                        <div><span style={{fontWeight: "bold"}}>Cards sets: </span> {publicCardPacksCount}</div>
 
                     </div>

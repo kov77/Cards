@@ -8,3 +8,21 @@
 .userInfo > div {
     margin-top: 15px;
 }
+
+.avatarWrp {
+    position: relative;
+}
+
+.label {
+    position: absolute;
+    bottom: 30px;
+    right: 14px;
+    height: 30px;
+    width: 30px;
+    background-color: #d2cbcb;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}

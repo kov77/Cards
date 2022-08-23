@@ -26,6 +26,10 @@ export type userDataType = {
     error?: string
 }
 
+export type changeUserNameDataType = {
+    name: string
+}
+
 export const instance = axios.create({
     baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
     withCredentials: true,
@@ -40,8 +44,14 @@ export const authorizationApi = {
     },
     logout() {
         return instance.delete('/auth/me')
-    },
+    }
+}
+
+export const userApi = {
     getUserData() {
         return instance.post('/auth/me')
     },
+    changeUserName(data: changeUserNameDataType) {
+        return instance.put('/auth/me', data)
+    }
 }

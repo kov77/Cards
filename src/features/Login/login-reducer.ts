@@ -2,12 +2,13 @@ import { createSlice } from "@reduxjs/toolkit"
 import { AxiosError } from "axios";
 import { Dispatch } from "redux"
 import {authorizationApi, loginDataType, registerDataType} from "../../app/api";
+import {setStatus} from "../../app/app-reducer";
 
 const initialState = {
     email: '',
     password: "",
     rememberMe: true,
-    isLoggedIn: false,
+    isLoggedIn: false
 }
 
 const slice = createSlice({
@@ -33,15 +34,17 @@ export const loginReducer = slice.reducer
 //Thunks
 
 export const setLoginDataTC = (data: loginDataType) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: "loading"}))
     authorizationApi.setLoginData(data)
         .then(response => {
-            console.log(response)
+            dispatch(setStatus({status: "success"}))
         if(response.statusText === "OK") {
             dispatch(setIsLoggedIn({isLoggedIn: true}))
-
         }
     })
         .catch((error: AxiosError) => {
-        console.log(error)
-    })
+        alert("wrong email or password")
+            dispatch(setStatus({status: "success"}))
+
+        })
 }
