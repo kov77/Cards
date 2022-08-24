@@ -3,7 +3,7 @@ import {Dispatch} from "redux";
 import {userApi} from "./api";
 import {setIsLoggedIn} from "../features/Login/login-reducer";
 
-export type RequestStatusType = "loading" | "success"
+export type RequestStatusType = "loading" | "success" | "failed"
 
 const initialState = {
     status: ""
@@ -34,7 +34,7 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
             }
         })
         .catch((error) => {
-            console.log("Not authorized ska")
+            console.log("Not authorized")
         })
 }
 

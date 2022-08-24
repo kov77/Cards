@@ -13,16 +13,14 @@ import {useDispatch} from "react-redux";
 import {useAppSelector} from "./store";
 import LinearProgress from '@mui/material/LinearProgress';
 
-function App() {
-    const dispatch = useDispatch()
+const App = () => {
     const status = useAppSelector((state) => state.app.status )
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(setStatus({status: 'loading'}))
             // @ts-ignore
             dispatch(initializeAppTC())
-            dispatch(setStatus({status: 'success'}))
-    }, [])
+    }, [ ])
 
     return (
         <BrowserRouter>

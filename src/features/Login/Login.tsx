@@ -99,9 +99,9 @@ export const SignIn = React.memo(() => {
                                 </Button>
                                 <Grid container>
                                     <Grid item xs>
-                                        <Link href="#" variant="body2">
+                                        <NavLink className={"navlink"} to="/recovery">
                                             Forgot password?
-                                        </Link>
+                                        </NavLink>
                                     </Grid>
                                     <Grid item xs>
                                         <NavLink className={"navlink"} to="/registration">

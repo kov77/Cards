@@ -55,3 +55,9 @@ export const userApi = {
         return instance.put('/auth/me', data)
     }
 }
+
+export const restoreApi = {
+    sendRestoreData(data: any) {
+        return instance.post('/auth/forgot', data)
+    }
+}

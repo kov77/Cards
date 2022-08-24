@@ -27,6 +27,7 @@ export const Profile = () => {
         if(isLoggedIn) {
             // @ts-ignore
             dispatch(fetchUserTC())
+
         }
     }, [])
 
