@@ -29,7 +29,7 @@ const App = () => {
                 <div className="App">
                     {status === "loading" && <LinearProgress style={{"width": "100%"}} color="secondary"/>}
                     <Routes>
-                        <Route path={'/profile'} element={<Profile />} />
+                        <Route path={'/'} element={<Profile />} />
                         <Route path={'/login'} element={<SignIn />} />
                         <Route path={'/newpass'} element={<NewPassword />} />
                         <Route path={'/recovery'} element={<Recovery />} />
