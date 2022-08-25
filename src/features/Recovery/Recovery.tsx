@@ -28,7 +28,7 @@ export const Recovery = React.memo(() => {
             // можно указать разработчика фронта)
             message: `<div style="background-color: lime; padding: 15px">
 password recovery link: 
-<a href='http://localhost:3000/#/newpass/$token$'>
+<a href='http://localhost:3000/newpass/$token$'>
 link</a>
 </div>`
         }

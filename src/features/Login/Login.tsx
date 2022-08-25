@@ -40,7 +40,7 @@ export const SignIn = React.memo(() => {
     const theme = createTheme();
 
     if(isLoggedIn) {
-        return <Navigate to="/"/>
+        return <Navigate to="/profile"/>
     }
 
     return (

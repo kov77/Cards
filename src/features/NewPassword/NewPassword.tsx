@@ -5,7 +5,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockIcon from '@mui/icons-material/Lock';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,6 +16,10 @@ import {AppStateType} from "../../app/store";
 export const NewPassword = React.memo(() => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
+    const passIsChanged = useSelector((state: AppStateType) => state.newPass.passIsChanged)
+    // if(!isLoggedIn) {
+    //     return <Navigate to="/login"/>
+    // }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -30,11 +33,9 @@ export const NewPassword = React.memo(() => {
 
     };
     const theme = createTheme();
-
-    // if(isLoggedIn) {
-    //     return <Navigate to="/profile"/>
-    // }
-
+    if(!isLoggedIn) {
+        return <Navigate to="/login"/>
+    }
     return (
         <div>
             <ThemeProvider theme={theme}>
