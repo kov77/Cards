@@ -9,12 +9,12 @@ export const Sidebar = () => {
 
     return (
         <nav className={classes.sidebarWrp}>
-            {!isLoggedIn && <NavLink className={classes.linkItem} to="/login">Login</NavLink>}
-            {isLoggedIn && <NavLink className={classes.linkItem} to="/newpass">New Pass</NavLink>}
-            {isLoggedIn && <NavLink className={classes.linkItem} to="/profile">Profile</NavLink>}
+            <NavLink className={classes.linkItem} to="/login">Login</NavLink>
+            <NavLink className={classes.linkItem} to="/newpass">New Pass</NavLink>
+            <NavLink className={classes.linkItem} to="/profile">Profile</NavLink>
             <NavLink className={classes.linkItem} to="/recovery">Recovery</NavLink>
             <NavLink className={classes.linkItem} to="/registration">Registration</NavLink>
-            {isLoggedIn && <NavLink className={classes.linkItem} to="/">Cards</NavLink>}
+            <NavLink className={classes.linkItem} to="/packs">Packs</NavLink>
         </nav>
     )
 }

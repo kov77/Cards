@@ -53,7 +53,7 @@ export const fetchUserTC = () => (dispatch: Dispatch) => {
             dispatch(setStatus({status: "success"}))
         })
         .catch((error: AxiosError) => {
-        console.log('You are not authorized ska')
+        console.log(error)
     })
 
 }

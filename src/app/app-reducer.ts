@@ -1,7 +1,4 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {Dispatch} from "redux";
-import {userApi} from "./api";
-import {setIsLoggedIn} from "../features/Login/login-reducer";
 
 export type RequestStatusType = "loading" | "success" | "failed"
 
@@ -26,15 +23,13 @@ export const {setStatus} = slice.actions
 
 // Thunks
 
-export const initializeAppTC = () => (dispatch: Dispatch) => {
-    userApi.getUserData()
-        .then(response => {
-            if(response.statusText === "OK") {
-                dispatch(setIsLoggedIn({isLoggedIn: true}))
-            }
-        })
-        .catch((error) => {
-            console.log("Not authorized")
-        })
-}
+// export const initializeAppTC = () => (dispatch: Dispatch) => {
+//     userApi.getUserData()
+//         .then(response => {
+//             dispatch(setIsLoggedIn({isLoggedIn: true}))
+//         })
+//         .catch((error) => {
+//             console.log("Not authorized")
+//         })
+// }
 

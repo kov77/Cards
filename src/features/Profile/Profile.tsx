@@ -27,6 +27,8 @@ export const Profile = () => {
         if(isLoggedIn) {
             // @ts-ignore
             dispatch(fetchUserTC())
+        } else {
+            console.log('you are not authorized')
         }
     }, [])
 

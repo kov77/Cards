@@ -4,7 +4,7 @@ import * as React from "react";
 import {useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 
-export const Cards = (props: any) => {
+export const Packs = (props: any) => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
 
     if(!isLoggedIn) {

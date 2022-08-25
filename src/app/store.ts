@@ -9,6 +9,7 @@ import { recoveryReducer } from "../features/Recovery/recovery-reducer";
 import thunk from 'redux-thunk';
 import { registrationReducer } from "../features/Registration/registration-reducer";
 import { appReducer } from "./app-reducer";
+import { packsReducer } from "../features/Packs/packs-reducer";
 
 const rootReducer = combineReducers({
     profile: profileReducer,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     newPass: newPassReducer,
     recovery: recoveryReducer,
     registration: registrationReducer,
-    app: appReducer
+    app: appReducer,
+    packs: packsReducer
 })
 
 export const store = configureStore({
