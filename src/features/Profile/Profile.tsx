@@ -24,11 +24,9 @@ export const Profile = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log("profile use effect")
         if(isLoggedIn) {
             // @ts-ignore
             dispatch(fetchUserTC())
-
         }
     }, [])
 

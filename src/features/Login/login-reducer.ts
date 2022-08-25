@@ -37,11 +37,9 @@ export const setLoginDataTC = (data: loginDataType) => (dispatch: Dispatch) => {
     dispatch(setStatus({status: "loading"}))
     authorizationApi.setLoginData(data)
         .then(response => {
-            dispatch(setStatus({status: "success"}))
-        if(response.statusText === "OK") {
             dispatch(setIsLoggedIn({isLoggedIn: true}))
-        }
-    })
+            dispatch(setStatus({status: "success"}))
+        })
         .catch((error: AxiosError) => {
         alert("wrong email or password")
             dispatch(setStatus({status: "success"}))
