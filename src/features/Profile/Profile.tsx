@@ -12,7 +12,7 @@ import {AppStateType} from "../../app/store";
 import { useEffect } from 'react';
 import {changeNameTC, fetchUserTC, logoutTC, setIsChecked} from "./profile-reducer";
 import {Navigate} from "react-router-dom";
-import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
+import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 export const Profile = () => {
     const isChecked = useSelector((state: AppStateType) => state.profile.isChecked)
     const name = useSelector((state: AppStateType) => state.profile.name)
@@ -65,7 +65,7 @@ export const Profile = () => {
                     </Typography>
                     <div className={classes.avatarWrp}>
                         <Avatar sx={{ width: 96, height: 96, mt: 2, mb: 3}} alt="Avatar" src={avatar} />
-                        <label htmlFor="avatar" className={classes.label}><ModeEditOutlinedIcon/></label>
+                        <label htmlFor="avatar" className={classes.label}><AddAPhotoOutlinedIcon/></label>
                         <input onChange={e => inputChangeAvatarHandler(e)} style={{display: "none"}}type="file"
                                id="avatar"
                                name="avatar"

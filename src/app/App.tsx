@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {BrowserRouter, Route, Routes, } from 'react-router-dom';
 import './App.css';
 import {Error} from "../features/Error/Error";
@@ -11,6 +11,7 @@ import {Sidebar} from "../features/Sidebar/Sidebar";
 import {useAppSelector} from "./store";
 import LinearProgress from '@mui/material/LinearProgress';
 import { Packs } from '../features/Packs/Packs';
+import {RecoveryModal} from "../features/Recovery/RecoveryModal";
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )
@@ -30,11 +31,12 @@ const App = () => {
                     <Routes>
                         <Route path={'/login'} element={<SignIn />} />
                         <Route path={'/profile'} element={<Profile />} />
-                        <Route path={'/newpass'} element={<NewPassword />} />
+                        <Route path={'/newpass/*'} element={<NewPassword />} />
                         <Route path={'/recovery'} element={<Recovery />} />
                         <Route path={'/registration'} element={<Registration />} />
                         <Route path={'/error'} element={<Error />} />
-                        <Route path={'packs'} element={<Packs />} />
+                        <Route path={'/packs'} element={<Packs />} />
+                        <Route path={'/recoverymodal'} element={<RecoveryModal />} />
                     </Routes>
                 </div>
             </div>

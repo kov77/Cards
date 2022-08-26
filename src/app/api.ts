@@ -1,4 +1,5 @@
 import axios from "axios";
+import {restoreDataType} from "../features/Recovery/recovery-reducer";
 
 export type registerDataType = {
     email: string
@@ -31,8 +32,8 @@ export type changeUserNameDataType = {
 }
 
 export const instance = axios.create({
-    // baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
-    baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
+    baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
+    // baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
     withCredentials: true,
 })
 
@@ -58,7 +59,10 @@ export const userApi = {
 }
 
 export const restoreApi = {
-    sendRestoreData(data: any) {
-        return instance.post('/auth/forgot', data)
+    sendRestoreData(data: restoreDataType) {
+        return axios.post('https://neko-back.herokuapp.com/2.0/auth/forgot', data)
+    },
+    sentNewPassData(data: any) {
+        return axios.post('https://neko-back.herokuapp.com/2.0/auth/set-new-password', data)
     }
 }

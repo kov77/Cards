@@ -1,40 +1,42 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
-import {RequestStatusType, setStatus} from "../../app/app-reducer";
+import {setStatus} from "../../app/app-reducer";
 import {restoreApi} from "../../app/api";
-import { useLocation } from "react-router-dom";
 
+export type restoreDataType = {
+    email: string
+    from: string
+    message: string
+}
 
 const initialState = {
-    token: ''
+    recoveryRequestStatus: "",
+    recoveryEmail: ''
 }
 
 const slice = createSlice({
     name: "recovery",
     initialState,
     reducers: {
-        getToken(state, action: PayloadAction<{token: string}>) {
-            state.token = action.payload.token
-        }
+        setRecoveryStatus(state, action: PayloadAction<{recoveryRequestStatus: string}>) {
+            state.recoveryRequestStatus = action.payload.recoveryRequestStatus
+        },
+        setRecoveryEmail(state, action: PayloadAction<{recoveryEmail: string}>) {
+            state.recoveryEmail = action.payload.recoveryEmail
+        },
     }
 })
-export const {getToken} = slice.actions
+export const {setRecoveryStatus, setRecoveryEmail} = slice.actions
 export const recoveryReducer = slice.reducer
 
 //Thunks
-
-export const restorePasswordTC = (data: any) => (dispatch: Dispatch) => {
+export const restorePasswordTC = (data: restoreDataType) => (dispatch: Dispatch) => {
     dispatch(setStatus({status: "loading"}))
+    dispatch(setRecoveryEmail({recoveryEmail: data.email}))
     restoreApi.sendRestoreData(data)
         .then(response => {
-            const location = useLocation()
-            const token = location.pathname
-
+            dispatch(setRecoveryStatus({recoveryRequestStatus: response.data.success}))
             dispatch(setStatus({status: "success"}))
-            dispatch(getToken({token}))
-
-            console.log(response)
-            console.log(token)
             }
         )
         .catch(error => {

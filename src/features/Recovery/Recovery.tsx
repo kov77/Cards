@@ -1,24 +1,21 @@
 import React from 'react';
-import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockIcon from '@mui/icons-material/Lock';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import {Navigate, NavLink} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../app/store";
 import {restorePasswordTC} from "./recovery-reducer";
+import {AppStateType} from "../../app/store";
 
-export const Recovery = React.memo(() => {
+export const Recovery = () => {
     const dispatch = useDispatch()
-    const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
-
+debugger
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -38,7 +35,11 @@ link</a>
 
     };
     const theme = createTheme();
+    const recoveryRequestStatus = useSelector((state:AppStateType) => state.recovery.recoveryRequestStatus)
 
+    if(recoveryRequestStatus) {
+    return <Navigate to="/recoverymodal"/>
+}
     return (
         <div>
             <ThemeProvider theme={theme}>
@@ -75,7 +76,7 @@ link</a>
                                     variant="contained"
                                     sx={{mt: 3, mb: 2}}
                                 >
-                                    Send Email
+                                    Send link
                                 </Button>
                                 <Grid container>
                                     <Grid item xs>
@@ -96,4 +97,4 @@ link</a>
             </ThemeProvider>
         </div>
     );
-})
+}
