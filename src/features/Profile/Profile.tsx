@@ -24,12 +24,9 @@ export const Profile = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(isLoggedIn) {
             // @ts-ignore
             dispatch(fetchUserTC())
-        } else {
-            console.log('you are not authorized')
-        }
+
     }, [])
 
     const logoutBtnHandler = () => {

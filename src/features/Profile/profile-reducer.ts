@@ -77,4 +77,7 @@ export const changeNameTC = (name: changeUserNameDataType) => (dispatch: Dispatc
             dispatch(setName({name}))
             dispatch(setStatus({status: "success"}))
         })
+        .catch(error => {
+            console.log(error)
+        })
 }

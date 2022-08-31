@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -17,10 +17,16 @@ import {Navigate, NavLink} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {setLoginDataTC} from "./login-reducer";
+import {initializeAppTC} from "../../app/app-reducer"
 
 export const SignIn = React.memo(() => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
+
+    useEffect(() => {
+            // @ts-ignore
+            dispatch(initializeAppTC())
+    }, [ ])
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
