@@ -17,16 +17,12 @@ import {Navigate, NavLink} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {setLoginDataTC} from "./login-reducer";
-import {initializeAppTC} from "../../app/app-reducer"
 
 export const SignIn = React.memo(() => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
 
-    useEffect(() => {
-            // @ts-ignore
-            dispatch(initializeAppTC())
-    }, [ ])
+
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -45,7 +41,7 @@ export const SignIn = React.memo(() => {
     const theme = createTheme();
 
     if(isLoggedIn) {
-        return <Navigate to="/profile"/>
+        return <Navigate to="/"/>
     }
 
     return (

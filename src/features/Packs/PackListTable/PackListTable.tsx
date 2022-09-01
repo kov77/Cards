@@ -7,6 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import classes from "../Packs.module.css"
+import {useSelector} from "react-redux";
+import {AppStateType} from "../../../app/store";
 
 interface Column {
     id: string;
@@ -18,55 +21,81 @@ interface Column {
 
 const columns: readonly Column[] = [
     { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+    { id: 'cards', label: 'Cards', minWidth: 100 },
     {
-        id: 'population',
-        label: 'Population',
+        id: 'last_updated',
+        label: 'Last Updated',
         minWidth: 170,
         align: 'right',
         format: (value: number) => value.toLocaleString('en-US'),
     },
     {
-        id: 'size',
-        label: 'Size\u00a0(km\u00b2)',
+        id: 'created_by',
+        label: 'Created by',
         minWidth: 170,
         align: 'right',
         format: (value: number) => value.toLocaleString('en-US'),
     },
     {
-        id: 'density',
-        label: 'Density',
+        id: 'actions',
+        label: 'Actions',
         minWidth: 170,
         align: 'right',
         format: (value: number) => value.toFixed(2),
     },
 ];
 
+type actionsType = "delete" | "edit" | "remove"
+
 interface Data {
     name: string;
-    code: string;
-    population: number;
-    size: number;
-    density: number;
+    cards: number;
+    last_updated: number;
+    created_by: number;
+    actions?: actionsType[];
 }
 
 function createData(
     name: string,
-    code: string,
-    population: number,
-    size: number,
+    cards: number,
+    last_updated: number,
+    created_by: number,
+    actions: actionsType[]
 ): Data {
-    const density = population / size;
-    return { name, code, population, size, density };
+    return { name, cards, last_updated, created_by, actions};
 }
 
-const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-];
+
+
 
 export function PackListTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+    const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
+
+    // let name = '',
+    //     cardsCount = 0,
+    //     updated = 0,
+    //     user_name = 0,
+    //     actions: any = []
+    let rows: any = []
+    console.log(cardPacks)
+
+    // @ts-ignore
+    cardPacks.forEach((pack: any) => {
+        console.log(pack)
+            rows.push(createData(pack.name, pack.cardsCount, pack.updated, pack.user_name, ['delete']),
+            )
+            // createData(name, cardsCount, updated, user_name, actions),
+
+        // return rows
+
+    })
+
+
+
+
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
@@ -99,14 +128,15 @@ export function PackListTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any) => {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    <TableRow hover tabIndex={-1}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
-                                            return (
-                                                <TableCell key={column.id} align={column.align}>
-                                                    {value}
-                                                </TableCell>
-                                            );
+                                            if((typeof value) === "string" || "number") {
+                                                return <TableCell align={column.align}>{value}</TableCell>
+                                            } else {
+                                                return value.forEach((el: any) => <button className={classes.actionsBtn}>{el}</button>)
+                                            }
+
                                         })}
                                     </TableRow>
                                 );

@@ -35,7 +35,7 @@ const App = () => {
                         <Route path={'/recovery'} element={<Recovery />} />
                         <Route path={'/registration'} element={<Registration />} />
                         <Route path={'/error'} element={<Error />} />
-                        <Route path={'/packs'} element={<Packs />} />
+                        <Route path={'/'} element={<Packs />} />
                         <Route path={'/recoverymodal'} element={<RecoveryModal />} />
                     </Routes>
                 </div>

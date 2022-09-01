@@ -1,16 +1,18 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {packsApi} from "../../app/api";
+import {setIsLoggedIn} from "../Login/login-reducer";
 
 const initialState = {
-    cardsPacks: {},
-    cardPacksTotalCount: 0,
-    maxCardsCount: 0,
-    minCardsCount: 0,
-    page: 0, // выбранная страница
-    pageCount: 0}
+    cardPacks: [],
+    cardPacksTotalCount: 5,
+    maxCardsCount: 10,
+    minCardsCount: 5,
+    page: 1, // выбранная страница
+    pageCount: 30
+}
 
-type pack = {
+type packType = {
     _id: string
     user_id: string
     name: string
@@ -20,7 +22,7 @@ type pack = {
 }
 
 type responseDataType = {
-    cardsPacks: pack[]
+    cardPacks: packType[]
     cardPacksTotalCount: number
     maxCardsCount: number
     minCardsCount: number
@@ -34,27 +36,37 @@ const slice = createSlice({
     name: "packs",
     initialState,
     reducers: {
+        // @ts-ignore
         getPacksData(state, action: PayloadAction<{data: responseDataType}>) {
-            state = action.payload.data
+            return {...state, cardPacks: action.payload.data.cardPacks}
+        },
+        setRequestData(state, action: PayloadAction<{data: responseDataType}>) {
+            return {...state, cardPacksTotalCount: action.payload.data.cardPacksTotalCount, pageCount: action.payload.data.pageCount, maxCardsCount: action.payload.data.maxCardsCount, minCardsCount: action.payload.data.maxCardsCount, page: action.payload.data.page
+            }
         }
     }
 })
 
 export  const packsReducer = slice.reducer
 
-export const {getPacksData} = slice.actions
+export const {getPacksData, setRequestData} = slice.actions
 
 
 // Thunks
 
 export const fetchPacksTC = () => (dispatch: Dispatch) => {
-    packsApi.getPack()
+
+    packsApi.getPack(initialState.minCardsCount, initialState.maxCardsCount, initialState.pageCount, 1, initialState.page)
         .then(response => {
-            getPacksData(response.data)
+            debugger
+            const data = response.data
+            dispatch(getPacksData({data}))
         })
         .catch((error) => {
-            console.log("Not authorized packs")
+
+            alert(error)
         })
 }
+
 
 

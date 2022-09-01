@@ -10,6 +10,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 import {useEffect} from "react";
 import {fetchPacksTC} from "./packs-reducer";
+import { initializeAppTC } from "../../app/app-reducer";
 
 export const Packs = (props: any) => {
     const dispatch = useDispatch()
@@ -17,8 +18,12 @@ export const Packs = (props: any) => {
 
     useEffect(() => {
         // @ts-ignore
-        dispatch(fetchPacksTC())
-    })
+        dispatch(initializeAppTC())
+        if(isLoggedIn) {
+            // @ts-ignore
+            dispatch(fetchPacksTC())
+        }
+    }, [isLoggedIn])
 
     if(!isLoggedIn) {
         return <Navigate to="/login"/>

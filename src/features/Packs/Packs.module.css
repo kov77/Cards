@@ -39,5 +39,9 @@
     border-radius: 30px;
     font-weight: bold;
     background: rgb(2,0,36);
-    background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(11,11,152,1) 50%, rgba(0,212,255,1) 93%);}
+    background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(11,11,152,1) 50%, rgba(0,212,255,1) 93%);
+}
 
+.actionsBtn {
+    margin-left: 20px;
+}

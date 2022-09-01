@@ -13,7 +13,7 @@ export const Sidebar = () => {
             <NavLink className={classes.linkItem} to="/profile">Profile</NavLink>
             <NavLink className={classes.linkItem} to="/recovery">Recovery</NavLink>
             <NavLink className={classes.linkItem} to="/registration">Registration</NavLink>
-            <NavLink className={classes.linkItem} to="/packs">Packs</NavLink>
+            <NavLink className={classes.linkItem} to="/">Packs</NavLink>
         </nav>
     )
 }

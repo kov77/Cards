@@ -54,7 +54,9 @@ export const fetchUserTC = () => (dispatch: Dispatch) => {
         })
         .catch((error: AxiosError) => {
         console.log(error)
-    })
+            dispatch(setStatus({status: "failed"}))
+
+        })
 
 }
 

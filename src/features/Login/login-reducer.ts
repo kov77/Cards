@@ -42,7 +42,7 @@ export const setLoginDataTC = (data: loginDataType) => (dispatch: Dispatch) => {
         })
         .catch((error: AxiosError) => {
         alert("wrong email or password")
-            dispatch(setStatus({status: "success"}))
+            dispatch(setStatus({status: "failed"}))
 
         })
 }
