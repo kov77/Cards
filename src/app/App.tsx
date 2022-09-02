@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter, Route, Routes, } from 'react-router-dom';
 import './App.css';
 import {Error} from "../features/Error/Error";
@@ -12,15 +12,17 @@ import {useAppSelector} from "./store";
 import LinearProgress from '@mui/material/LinearProgress';
 import { Packs } from '../features/Packs/Packs';
 import {RecoveryModal} from "../features/Recovery/RecoveryModal";
+import {useDispatch} from "react-redux";
+import { initializeAppTC } from './app-reducer';
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )
-    // const dispatch = useDispatch()
-    //
-    // useEffect(() => {
-    //         // @ts-ignore
-    //         dispatch(initializeAppTC())
-    // }, [ ])
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        // @ts-ignore
+        dispatch(initializeAppTC())
+    }, [ ])
 
     return (
         <BrowserRouter>

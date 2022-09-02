@@ -32,10 +32,12 @@ export type changeUserNameDataType = {
 }
 
 export const instance = axios.create({
-    // baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
-    baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
+    baseURL: process.env.REACT_APP_BACK_URL || 'http://localhost:7542/2.0/',
+    // baseURL: process.env.REACT_APP_BACK_URL || 'https://neko-back.herokuapp.com/2.0',
     withCredentials: true,
 })
+
+
 
 export const authorizationApi = {
     setRegistrationData(data: registerDataType) {
@@ -69,7 +71,10 @@ export const restoreApi = {
 
 export const packsApi = {
     getPack(min?: number, max?: number, pageCount?: number, sortPacks?: number, page?: number, user_id?: string) {
-        return instance.get(`https://neko-back.herokuapp.com/2.0/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}`)
-        // return instance.get(`/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}`)
-    }
+if(user_id !== undefined) {
+    return instance.get(`/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}&user_id=${user_id}`)
+} else {
+    return instance.get(`/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}&page=${page}`)
+
+}}
 }

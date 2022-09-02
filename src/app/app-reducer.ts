@@ -36,6 +36,7 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
             dispatch(setIsLoggedIn({isLoggedIn: true}))
         })
         .catch((error) => {
+            dispatch(setIsLoggedIn({isLoggedIn: false}))
             console.log("Not authorized initializeAppTC")
         })
 }

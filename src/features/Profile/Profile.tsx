@@ -24,9 +24,10 @@ export const Profile = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
+        if(isLoggedIn) {
             // @ts-ignore
             dispatch(fetchUserTC())
-
+        }
     }, [])
 
     const logoutBtnHandler = () => {
@@ -50,7 +51,6 @@ export const Profile = () => {
 
 
     if(!isLoggedIn) {
-        debugger
         return <Navigate to="/login"/>
     }
 

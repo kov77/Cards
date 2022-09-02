@@ -5,11 +5,11 @@ import {setIsLoggedIn} from "../Login/login-reducer";
 
 const initialState = {
     cardPacks: [],
-    cardPacksTotalCount: 5,
-    maxCardsCount: 10,
+    cardPacksTotalCount: 0,
+    maxCardsCount: 30,
     minCardsCount: 5,
     page: 1, // выбранная страница
-    pageCount: 30
+    pageCount: 10
 }
 
 type packType = {
@@ -36,37 +36,44 @@ const slice = createSlice({
     name: "packs",
     initialState,
     reducers: {
-        // @ts-ignore
-        getPacksData(state, action: PayloadAction<{data: responseDataType}>) {
+        getPacksData(state, action: any) {
             return {...state, cardPacks: action.payload.data.cardPacks}
         },
-        setRequestData(state, action: PayloadAction<{data: responseDataType}>) {
-            return {...state, cardPacksTotalCount: action.payload.data.cardPacksTotalCount, pageCount: action.payload.data.pageCount, maxCardsCount: action.payload.data.maxCardsCount, minCardsCount: action.payload.data.maxCardsCount, page: action.payload.data.page
-            }
-        }
+        setMinCardsCount(state, action: PayloadAction<{minCardsCount: number}>) {
+            return {...state, minCardsCount: action.payload.minCardsCount}
+        },
+        setMaxCardsCount(state, action: PayloadAction<{maxCardsCount: number}>) {
+            return {...state, maxCardsCount: action.payload.maxCardsCount}
+        },
+        setCardPacksTotalCount(state, action: PayloadAction<{cardPacksTotalCount: number}>) {
+            return {...state, cardPacksTotalCount: action.payload.cardPacksTotalCount}
+        },
+        setCurrentPage(state, action: PayloadAction<{page: number}>) {
+            return {...state, page: action.payload.page}
+        },
+        setPageCount(state, action: PayloadAction<{pageCount: number}>) {
+            return {...state, pageCount: action.payload.pageCount}
+        },
     }
 })
 
 export  const packsReducer = slice.reducer
 
-export const {getPacksData, setRequestData} = slice.actions
+export const {getPacksData, setMinCardsCount, setMaxCardsCount, setCardPacksTotalCount, setCurrentPage, setPageCount} = slice.actions
 
 
 // Thunks
 
-export const fetchPacksTC = () => (dispatch: Dispatch) => {
+export const fetchPacksTC = (minCount?: number, maxCount?: number, userId?: string) => (dispatch: Dispatch) => {
 
-    packsApi.getPack(initialState.minCardsCount, initialState.maxCardsCount, initialState.pageCount, 1, initialState.page)
+    packsApi.getPack(minCount, maxCount, initialState.cardPacksTotalCount, 1, initialState.page, userId)
         .then(response => {
-            debugger
             const data = response.data
             dispatch(getPacksData({data}))
         })
         .catch((error) => {
-
-            alert(error)
+            console.log(error)
         })
 }
-
 
 

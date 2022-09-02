@@ -80,6 +80,7 @@ export const changeNameTC = (name: changeUserNameDataType) => (dispatch: Dispatc
             dispatch(setStatus({status: "success"}))
         })
         .catch(error => {
+            dispatch(setIsLoggedIn({isLoggedIn: false}))
             console.log(error)
         })
 }

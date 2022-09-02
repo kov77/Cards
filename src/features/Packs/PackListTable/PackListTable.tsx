@@ -8,8 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import classes from "../Packs.module.css"
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
+import {setCurrentPage, setPageCount} from "../packs-reducer";
+import Stack from '@mui/material/Stack';
+import Pagination from '@mui/material/Pagination';
 
 interface Column {
     id: string;
@@ -72,36 +75,25 @@ export function PackListTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+    const dispatch = useDispatch()
     const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
 
-    // let name = '',
-    //     cardsCount = 0,
-    //     updated = 0,
-    //     user_name = 0,
-    //     actions: any = []
+
     let rows: any = []
-    console.log(cardPacks)
 
     // @ts-ignore
     cardPacks.forEach((pack: any) => {
-        console.log(pack)
             rows.push(createData(pack.name, pack.cardsCount, pack.updated, pack.user_name, ['delete']),
             )
-            // createData(name, cardsCount, updated, user_name, actions),
-
-        // return rows
-
     })
 
-
-
-
-
     const handleChangePage = (event: unknown, newPage: number) => {
+        dispatch(setCurrentPage({page: newPage}))
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(setPageCount({pageCount: +event.target.value}))
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
