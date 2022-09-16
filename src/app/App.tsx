@@ -22,7 +22,7 @@ const App = () => {
     useEffect(() => {
         // @ts-ignore
         dispatch(initializeAppTC())
-    }, [ ])
+    }, [])
 
     return (
         <BrowserRouter>

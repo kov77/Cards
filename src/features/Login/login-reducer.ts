@@ -34,7 +34,6 @@ export const loginReducer = slice.reducer
 //Thunks
 
 export const setLoginDataTC = (data: loginDataType) => (dispatch: Dispatch) => {
-    dispatch(setStatus({status: "loading"}))
     authorizationApi.setLoginData(data)
         .then(response => {
             dispatch(setIsLoggedIn({isLoggedIn: true}))

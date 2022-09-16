@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useSelector } from "react-redux";
-import { combineReducers, createStore } from "redux";
+import { combineReducers } from "redux";
 import { errorReducer } from "../features/Error/error-reducer";
 import { loginReducer } from "../features/Login/login-reducer";
 import { newPassReducer } from "../features/NewPassword/newpass-reducer";

@@ -4,24 +4,32 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import classes from './ControlledSwitches.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {fetchPacksTC} from "../../../features/Packs/packs-reducer";
+import {fetchMyPacksTC, fetchPacksTC} from "../../../features/Packs/packs-reducer";
 import {AppStateType} from "../../../app/store";
+import {useEffect, useState} from "react";
 
 export function ControlledSwitches() {
-    // const [checked, setChecked] = React.useState(true);
 const dispatch = useDispatch()
-    const userId = useSelector((state: AppStateType) => state.app.userId)
-    const maxCardsCount = useSelector((state: AppStateType) => state.packs.maxCardsCount)
-    const minCardsCount = useSelector((state: AppStateType) => state.packs.minCardsCount)
+    const userId = useSelector((state: AppStateType) => state.packs.userId)
+
+    const[trigger, setTrigger] = useState(false)
+
+    useEffect(() => {
+        const triggerFromLocalStorage = localStorage.getItem('AllMyTrigger')
+        if(triggerFromLocalStorage) {
+            setTrigger(JSON.parse(triggerFromLocalStorage))
+        }
+    })
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // setChecked(event.target.checked);
-        if(event.target.checked) {
+        setTrigger(event.target.checked)
+        localStorage.setItem('AllMyTrigger', JSON.stringify(event.target.checked))
+        if(trigger) {
             // @ts-ignore
-            dispatch(fetchPacksTC(minCardsCount, maxCardsCount, userId))
+            dispatch(fetchMyPacksTC(userId))
         } else {
             // @ts-ignore
-            dispatch(fetchPacksTC(minCardsCount, maxCardsCount))
+            dispatch(fetchPacksTC())
         }
     };
 

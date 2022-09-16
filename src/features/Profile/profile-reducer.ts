@@ -63,8 +63,10 @@ export const fetchUserTC = () => (dispatch: Dispatch) => {
 export const logoutTC = () => (dispatch: Dispatch) => {
     authorizationApi.logout().then(response => {
         dispatch(setIsLoggedIn({isLoggedIn: false}))
+        localStorage.clear()
     })
         .catch(error => {
+            dispatch(setIsLoggedIn({isLoggedIn: false}))
             console.log(error)
         })
 }

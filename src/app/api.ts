@@ -38,7 +38,6 @@ export const instance = axios.create({
 })
 
 
-
 export const authorizationApi = {
     setRegistrationData(data: registerDataType) {
         return instance.post('/auth/register', data)
@@ -70,11 +69,17 @@ export const restoreApi = {
 }
 
 export const packsApi = {
-    getPack(min?: number, max?: number, pageCount?: number, sortPacks?: number, page?: number, user_id?: string) {
-if(user_id !== undefined) {
-    return instance.get(`/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}&user_id=${user_id}`)
-} else {
-    return instance.get(`/cards/pack?min=${min}&max=${max}&pageCount=${pageCount}&page=${page}`)
+    getPacks() {
+        return instance.get(`cards/pack`)
+    },
+    getMyPacks(userId: string) {
+        return instance.get(`/cards/pack?user_id=${userId}`)
+    },
 
-}}
+    searchPack(packName: string) {
+        return instance.get(`/cards/pack?packName=${packName}`)
+    },
+    rangePacks(minCount: number, maxCount: number) {
+        return instance.get(`/cards/pack?min=${minCount}&max=${maxCount}`)
+    }
 }

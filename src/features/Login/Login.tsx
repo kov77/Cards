@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -23,7 +23,6 @@ export const SignIn = React.memo(() => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
 
 
-
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
@@ -34,9 +33,10 @@ export const SignIn = React.memo(() => {
         }
         // @ts-ignore
         dispatch(setLoginDataTC(data))
-        event.currentTarget.reset()
 
     };
+
+
     const isChecked = true
     const theme = createTheme();
 

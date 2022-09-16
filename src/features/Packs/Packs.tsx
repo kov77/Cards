@@ -8,21 +8,27 @@ import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 import {useEffect} from "react";
-import {fetchPacksTC} from "./packs-reducer";
+import {fetchPacksTC, searchPackTC, setPackName} from "./packs-reducer";
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
+import {useDebounce} from "usehooks-ts";
+import {initializeAppTC} from "../../app/app-reducer";
 
 export const Packs = (props: any) => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
-    const maxCardsCount = useSelector((state: AppStateType) => state.packs.maxCardsCount)
-    const minCardsCount = useSelector((state: AppStateType) => state.packs.minCardsCount)
-    const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
 
+    // // useEffect(() => {
+    // //     // @ts-ignore
+    // //     dispatch(fetchPacksTC())
+    // }, [])
 
-    useEffect(() => {
-        // @ts-ignore
-        dispatch(fetchPacksTC(minCardsCount, maxCardsCount))
-    }, [maxCardsCount, minCardsCount, cardPacksTotalCount])
+    const [value, setValue] = React.useState("");
+    const debouncedValue = useDebounce(value, 1000)
+
+    const ohChangeInputHandler = (e: any) => {
+        setValue(e.currentTarget.value)
+    }
+
 
     if (!isLoggedIn) {
         return <Navigate to="/login"/>
@@ -44,7 +50,7 @@ export const Packs = (props: any) => {
             <div className={classes.packsList}>
                 <div className={classes.packsListAdd
                 }>
-                    <TextField size={"small"} className={classes.searchInput} id="outlined-basic" label="Search"
+                    <TextField onChange={e => ohChangeInputHandler(e)} size={"small"} className={classes.searchInput} id="outlined-basic" label="Search"
                                variant="outlined"/>
                     <Button className={classes.addNewPackBtn} variant="contained">Add new Pack</Button>
                 </div>

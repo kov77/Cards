@@ -1,12 +1,12 @@
 import {createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
 import { setIsLoggedIn } from "../features/Login/login-reducer";
 import { userApi } from "./api";
+import {getUserId} from "../features/Packs/packs-reducer";
 
 export type RequestStatusType = "loading" | "success" | "failed"
 
 const initialState = {
     status: "",
-    userId: ''
 }
 
 const slice = createSlice({
@@ -15,16 +15,13 @@ const slice = createSlice({
     reducers: {
         setStatus(state, action: PayloadAction<{status: RequestStatusType}>) {
             state.status = action.payload.status
-        },
-        getUserId(state, action: PayloadAction<{userId: string}>) {
-            state.userId = action.payload.userId
         }
     }
 })
 
 export  const appReducer = slice.reducer
 
-export const {setStatus, getUserId} = slice.actions
+export const {setStatus} = slice.actions
 
 
 // Thunks
@@ -37,7 +34,6 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         })
         .catch((error) => {
             dispatch(setIsLoggedIn({isLoggedIn: false}))
-            console.log("Not authorized initializeAppTC")
         })
 }
 

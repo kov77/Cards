@@ -10,9 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import classes from "../Packs.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import {setCurrentPage, setPageCount} from "../packs-reducer";
-import Stack from '@mui/material/Stack';
-import Pagination from '@mui/material/Pagination';
+import {fetchPacksTC, setCurrentPage, setPageCount} from "../packs-reducer";
+import {useEffect} from "react";
 
 interface Column {
     id: string;
@@ -78,13 +77,10 @@ export function PackListTable() {
     const dispatch = useDispatch()
     const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
 
-
     let rows: any = []
 
-    // @ts-ignore
     cardPacks.forEach((pack: any) => {
-            rows.push(createData(pack.name, pack.cardsCount, pack.updated, pack.user_name, ['delete']),
-            )
+        rows.push(createData(pack.name, pack.cardsCount, pack.updated, pack.user_name,  ['delete']))
     })
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -120,13 +116,13 @@ export function PackListTable() {
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any) => {
                                 return (
-                                    <TableRow hover tabIndex={-1}>
+                                    <TableRow key={row.id} hover tabIndex={-1}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
                                             if((typeof value) === "string" || "number") {
-                                                return <TableCell align={column.align}>{value}</TableCell>
+                                                return <TableCell key={column.id} align={column.align}>{value}</TableCell>
                                             } else {
-                                                return value.forEach((el: any) => <button className={classes.actionsBtn}>{el}</button>)
+                                                return value.forEach((el: any) => <button key={column.id} className={classes.actionsBtn}>{el}</button>)
                                             }
 
                                         })}
