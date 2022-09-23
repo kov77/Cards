@@ -14,6 +14,7 @@ import { Packs } from '../features/Packs/Packs';
 import {RecoveryModal} from "../features/Recovery/RecoveryModal";
 import {useDispatch} from "react-redux";
 import { initializeAppTC } from './app-reducer';
+import {fetchPacksTC} from "../features/Packs/packs-reducer";
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )

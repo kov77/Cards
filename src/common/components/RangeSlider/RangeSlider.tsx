@@ -2,43 +2,59 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import {useDispatch, useSelector} from "react-redux";
-import {rangePacksTC, setMaxCardsCount, setMinCardsCount} from "../../../features/Packs/packs-reducer";
-import {AppStateType} from "../../../app/store";
-import { useDebounce } from 'usehooks-ts'
-import {useEffect} from "react";
+import {useDebounce} from 'usehooks-ts'
+import {fetchPacksTC, rangePacks, setMaxCardsCount, setMinCardsCount} from '../../../features/Packs/packs-reducer';
+import {useEffect, useRef, useState} from "react";
+import {AppStateType} from '../../../app/store';
 
 
 function valuetext(value: number) {
     return `${value}`;
 }
 
-export const RangeSlider = () => {
-    let maxCardsCount = useSelector((state: AppStateType) => state.packs.maxCardsCount)
-    let minCardsCount = useSelector((state: AppStateType) => state.packs.minCardsCount)
+export const RangeSlider = React.memo(() => {
     const dispatch = useDispatch()
+    const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
+    const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
 
-    const [value, setValue] = React.useState<number[]>([minCardsCount, maxCardsCount]);
+    const [value, setValue] = useState([minValue, maxValue])
     const debouncedValue = useDebounce(value, 1000)
+
+    const handleChange = (event: Event, newValue: number | number[]) => {
+        localStorage.setItem('rangeCountValue', JSON.stringify(newValue))
+        setValue(newValue as number[])
+        dispatch(setMinCardsCount({minCardsCount: value[0]}))
+        dispatch(setMaxCardsCount({maxCardsCount: value[1]}))
+    };
 
     useEffect(() => {
         let valueFromLocalStorage = localStorage.getItem('rangeCountValue')
-        if(valueFromLocalStorage) {
-            let minMax = JSON.parse(valueFromLocalStorage)
-            setValue([minMax[0], minMax[1]])
-            // @ts-ignore
-            dispatch(rangePacksTC(minMax[0], minMax[1]))
+        if (valueFromLocalStorage) {
+            setValue(JSON.parse(valueFromLocalStorage))
+            dispatch(setMinCardsCount({minCardsCount: JSON.parse(valueFromLocalStorage)[0]}))
+            dispatch(setMaxCardsCount({maxCardsCount: JSON.parse(valueFromLocalStorage)[1]}))
         }
     }, [])
 
+    const firstUpdate = useRef(true);
     useEffect(() => {
-        // @ts-ignore
-        dispatch(rangePacksTC(debouncedValue[0], debouncedValue[1]))
-    }, [debouncedValue])
+        let valueFromLocalStorage = localStorage.getItem('rangeCountValue')
+        if (firstUpdate.current) {
+            firstUpdate.current = false;
+            return;
+        }
 
-    const handleChange = (event: Event, newValue: number | number[]) => {
-        setValue(newValue as number[]);
-        localStorage.setItem('rangeCountValue', JSON.stringify(newValue))
-    };
+        if (valueFromLocalStorage) {
+            // @ts-ignore
+            dispatch(rangePacks(JSON.parse(valueFromLocalStorage)[0], JSON.parse(valueFromLocalStorage)[1]))
+        } else {
+            // @ts-ignore
+            dispatch(rangePacks(value[0], value[1]))
+        }
+
+        console.log("range slider")
+    }, [debouncedValue]);
+
     return (
         <Box sx={{width: "70%"}}>
             <Slider
@@ -50,5 +66,5 @@ export const RangeSlider = () => {
                 size={"small"}
             />
         </Box>
-    );
-}
+    )
+})

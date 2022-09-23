@@ -3,6 +3,7 @@ import { AxiosError } from "axios";
 import { Dispatch } from "redux"
 import {authorizationApi, loginDataType, registerDataType} from "../../app/api";
 import {setStatus} from "../../app/app-reducer";
+import {fetchPacksTC} from "../Packs/packs-reducer";
 
 const initialState = {
     email: '',
@@ -38,6 +39,8 @@ export const setLoginDataTC = (data: loginDataType) => (dispatch: Dispatch) => {
         .then(response => {
             dispatch(setIsLoggedIn({isLoggedIn: true}))
             dispatch(setStatus({status: "success"}))
+            // @ts-ignore
+            dispatch(fetchPacksTC())
         })
         .catch((error: AxiosError) => {
         alert("wrong email or password")

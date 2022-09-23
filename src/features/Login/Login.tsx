@@ -17,6 +17,7 @@ import {Navigate, NavLink} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {setLoginDataTC} from "./login-reducer";
+import {fetchPacksTC} from "../Packs/packs-reducer";
 
 export const SignIn = React.memo(() => {
     const dispatch = useDispatch()
@@ -33,9 +34,7 @@ export const SignIn = React.memo(() => {
         }
         // @ts-ignore
         dispatch(setLoginDataTC(data))
-
     };
-
 
     const isChecked = true
     const theme = createTheme();

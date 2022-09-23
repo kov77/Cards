@@ -13,6 +13,8 @@ const dispatch = useDispatch()
     const userId = useSelector((state: AppStateType) => state.packs.userId)
 
     const[trigger, setTrigger] = useState(false)
+    let maxCardsCount = useSelector((state: AppStateType) => state.packs.maxCardsCount)
+    let minCardsCount = useSelector((state: AppStateType) => state.packs.minCardsCount)
 
     useEffect(() => {
         const triggerFromLocalStorage = localStorage.getItem('AllMyTrigger')
@@ -24,12 +26,12 @@ const dispatch = useDispatch()
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTrigger(event.target.checked)
         localStorage.setItem('AllMyTrigger', JSON.stringify(event.target.checked))
-        if(trigger) {
+        if(!trigger) {
             // @ts-ignore
             dispatch(fetchMyPacksTC(userId))
         } else {
             // @ts-ignore
-            dispatch(fetchPacksTC())
+            dispatch(rangePacksTC(minCardsCount, maxCardsCount))
         }
     };
 

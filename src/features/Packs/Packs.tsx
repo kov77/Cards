@@ -7,27 +7,36 @@ import {PackListTable} from "./PackListTable/PackListTable";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {fetchPacksTC, searchPackTC, setPackName} from "./packs-reducer";
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
-import {useDebounce} from "usehooks-ts";
-import {initializeAppTC} from "../../app/app-reducer";
 
-export const Packs = (props: any) => {
+
+export const Packs = () => {
     const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
 
-    // // useEffect(() => {
-    // //     // @ts-ignore
-    // //     dispatch(fetchPacksTC())
-    // }, [])
-
-    const [value, setValue] = React.useState("");
-    const debouncedValue = useDebounce(value, 1000)
-
     const ohChangeInputHandler = (e: any) => {
-        setValue(e.currentTarget.value)
+        console.log(e.currentTarget.value)
     }
+
+    // const firstUpdate = useRef(true);
+
+    // useEffect(() => {
+    //     if (firstUpdate.current) {
+    //         // @ts-ignore
+    //         dispatch(fetchPacksTC())
+    //         console.log("packs slider")
+    //         firstUpdate.current = false;
+    //         return;
+    //     }
+    // })
+
+    // useEffect(() => {
+    //     // @ts-ignore
+    //     dispatch(fetchPacksTC())
+    //     console.log("packs slider")
+    // }, [])
 
 
     if (!isLoggedIn) {
@@ -43,7 +52,7 @@ export const Packs = (props: any) => {
                 </div>
                 <div className={classes.rangeSlider}>
                     <h5>Number of cards</h5>
-                    <RangeSlider/>
+                    <RangeSlider />
                 </div>
             </div>
 

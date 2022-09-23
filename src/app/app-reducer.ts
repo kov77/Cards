@@ -1,7 +1,6 @@
 import {createSlice, Dispatch, PayloadAction} from "@reduxjs/toolkit";
 import { setIsLoggedIn } from "../features/Login/login-reducer";
 import { userApi } from "./api";
-import {getUserId} from "../features/Packs/packs-reducer";
 
 export type RequestStatusType = "loading" | "success" | "failed"
 
@@ -15,13 +14,16 @@ const slice = createSlice({
     reducers: {
         setStatus(state, action: PayloadAction<{status: RequestStatusType}>) {
             state.status = action.payload.status
-        }
+        },
+        getUserId(state, action: PayloadAction<{ userId: string }>) {
+            return {...state, userId: action.payload.userId}
+        },
     }
 })
 
 export  const appReducer = slice.reducer
 
-export const {setStatus} = slice.actions
+export const {setStatus, getUserId} = slice.actions
 
 
 // Thunks

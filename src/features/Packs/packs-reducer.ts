@@ -1,6 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {packsApi} from "../../app/api";
+import store, { AppStateType } from "../../app/store";
+import {useSelector} from "react-redux";
 
 
 
@@ -55,9 +57,6 @@ const slice = createSlice({
         setPageCount(state, action: PayloadAction<{ pageCount: number }>) {
             return {...state, pageCount: action.payload.pageCount}
         },
-        getUserId(state, action: PayloadAction<{ userId: string }>) {
-            return {...state, userId: action.payload.userId}
-        },
         setPackName(state, action: PayloadAction<{ packName: string }>) {
             return {...state, packName: action.payload.packName}
         },
@@ -73,7 +72,6 @@ export const {
     setCardPacksTotalCount,
     setCurrentPage,
     setPageCount,
-    getUserId,
     setPackName
 } = slice.actions
 
@@ -81,8 +79,12 @@ export const {
 // Thunks
 
 export const fetchPacksTC = () => (dispatch: Dispatch) => {
+
     packsApi.getPacks()
-        .then(response => dispatch(getPacksData({data: response.data})))
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setCardPacksTotalCount({cardPacksTotalCount: response.data.cardPacksTotalCount}))
+        })
         .catch((error) => console.log(error))
 }
 export const fetchMyPacksTC = (userId:string) => (dispatch: Dispatch) => {
@@ -91,6 +93,16 @@ export const fetchMyPacksTC = (userId:string) => (dispatch: Dispatch) => {
             .then(response => dispatch(getPacksData({data: response.data})))
             .catch((error) => console.log(error))
     }
+}
+
+export const rangePacks = (min: number, max: number) => (dispatch: Dispatch) => {
+    packsApi.rangePacks(min, max)
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setMaxCardsCount({maxCardsCount: response.data.maxCardsCount}))
+            dispatch(setMinCardsCount({minCardsCount: response.data.minCardsCount}))
+            dispatch(setCardPacksTotalCount({cardPacksTotalCount: response.data.cardPacksTotalCount}))
+        })
 }
 
 export const searchPackTC = (packName: string) => (dispatch: Dispatch) => {
@@ -103,14 +115,4 @@ export const searchPackTC = (packName: string) => (dispatch: Dispatch) => {
     }
 }
 
-export const rangePacksTC = (minCount: number, maxCount: number) => (dispatch: Dispatch) => {
-    packsApi.rangePacks(minCount, maxCount)
-        .then(response => {
-                dispatch(getPacksData({data: response.data}))
-                dispatch(setMaxCardsCount({maxCardsCount: maxCount}))
-                dispatch(setMinCardsCount({minCardsCount: minCount}))
-            }
-        )
-        .catch((error) => console.log(error))
-}
 

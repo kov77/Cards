@@ -37,7 +37,6 @@ export const instance = axios.create({
     withCredentials: true,
 })
 
-
 export const authorizationApi = {
     setRegistrationData(data: registerDataType) {
         return instance.post('/auth/register', data)
@@ -70,16 +69,17 @@ export const restoreApi = {
 
 export const packsApi = {
     getPacks() {
-        return instance.get(`cards/pack`)
+        return instance.get(`/cards/pack`)
+    },
+    rangePacks(minCount: number, maxCount: number) {
+        return instance.get(`/cards/pack?min=${minCount}&max=${maxCount}`)
     },
     getMyPacks(userId: string) {
         return instance.get(`/cards/pack?user_id=${userId}`)
     },
-
     searchPack(packName: string) {
         return instance.get(`/cards/pack?packName=${packName}`)
-    },
-    rangePacks(minCount: number, maxCount: number) {
-        return instance.get(`/cards/pack?min=${minCount}&max=${maxCount}`)
     }
 }
+
+
