@@ -9,14 +9,25 @@ import TextField from "@mui/material/TextField";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
+import {useEffect, useState } from "react";
+import {useDebounce} from "usehooks-ts";
+import {searchPackTC, setPackName} from "./packs-reducer";
 
 
 export const Packs = () => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
+    const dispatch = useDispatch()
+
+    const [value, setValue] = useState<string>('')
+    const debouncedValue = useDebounce<string>(value, 1000)
 
     const ohChangeInputHandler = (e: any) => {
-        console.log(e.currentTarget.value)
+        setValue(e.currentTarget.value)
     }
+
+    useEffect(() => {
+        dispatch(setPackName({packName: value}))
+    }, [debouncedValue])
 
     if (!isLoggedIn) {
         return <Navigate to="/login"/>

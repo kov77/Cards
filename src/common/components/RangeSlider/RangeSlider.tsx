@@ -6,7 +6,9 @@ import {useDebounce} from 'usehooks-ts'
 import {
     fetchMyPacksTC,
     fetchMyRangedPacksTC,
-    rangePacks,
+    rangePacks, searchMyPackTC,
+    searchMyRangedPackTC,
+    searchRangedPackTC,
     setMaxCardsCount,
     setMinCardsCount
 } from '../../../features/Packs/packs-reducer';
@@ -24,6 +26,7 @@ export const RangeSlider = React.memo(() => {
     const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
     const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
     const userId = useSelector((state: AppStateType) => state.app.userId)
+    const packName = useSelector((state: AppStateType) => state.packs.packName)
 
     const [value, setValue] = useState([minValue, maxValue])
     const debouncedValue = useDebounce(value, 1000)
@@ -57,25 +60,45 @@ export const RangeSlider = React.memo(() => {
 
         if(switcherValueFromLocalStorage) {
             if (rangeValueFromLocalStorage) {
-                // @ts-ignore
-                dispatch(fetchMyRangedPacksTC(userId, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                if(packName) {
+                    // @ts-ignore
+                    dispatch(searchMyRangedPackTC(userId, packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                } else {
+                    // @ts-ignore
+                    dispatch(fetchMyRangedPacksTC(userId, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                }
             } else {
-                // @ts-ignore
-                dispatch(fetchMyPacksTC(userId))
+                if(packName) {
+                    // @ts-ignore
+                    dispatch(searchMyPackTC(userId, packName))
+                } else {
+                    // @ts-ignore
+                    dispatch(fetchMyPacksTC(userId))
+                }
             }
         } else {
             if (rangeValueFromLocalStorage) {
-                // @ts-ignore
-                dispatch(rangePacks(rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                if(packName) {
+                    // @ts-ignore
+                    dispatch(searchRangedPackTC(packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                } else {
+                    // @ts-ignore
+                    dispatch(rangePacks(rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                }
             } else {
-                // @ts-ignore
-                dispatch(rangePacks(value[0], value[1]))
+                if(packName) {
+                    // @ts-ignore
+                    dispatch(searchRangedPackTC(packName, value[0], value[1]))
+                } else {
+                    // @ts-ignore
+                    dispatch(rangePacks(value[0], value[1]))
+                }
             }
         }
 
 
         console.log("range slider")
-    }, [debouncedValue]);
+    }, [debouncedValue, packName]);
 
     return (
         <Box sx={{width: "70%"}}>
@@ -86,6 +109,7 @@ export const RangeSlider = React.memo(() => {
                 valueLabelDisplay="auto"
                 getAriaValueText={valuetext}
                 size={"small"}
+                style={{"color": "#0020ff"}}
             />
         </Box>
     )

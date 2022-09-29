@@ -17,15 +17,13 @@ const dispatch = useDispatch()
     let rangeValueFromLocalStorage = localStorage.getItem('rangeCountValue')
     let switcherValueFromLocalStorage = JSON.parse(localStorage.getItem('switcher')!)
 
-    const[switcherValue, setSwitcherValue] = useState(switcherValueFromLocalStorage)
-
+    const[checked, setChecked] = useState(switcherValueFromLocalStorage)
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let value = !event.currentTarget.checked
-        setSwitcherValue(value)
+        let value = event.currentTarget.checked
+        setChecked(value)
+        localStorage.setItem('switcher', JSON.stringify(value))
 
-        localStorage.setItem('switcher', JSON.stringify(switcherValue))
-
-        if(switcherValue) {
+        if(value) {
             if(rangeValueFromLocalStorage) {
                 // @ts-ignore
                 dispatch(fetchMyRangedPacksTC(userId, JSON.parse(rangeValueFromLocalStorage)[0], JSON.parse(rangeValueFromLocalStorage)[1]))
@@ -47,7 +45,7 @@ const dispatch = useDispatch()
 
     return (
         <FormGroup>
-            <FormControlLabel className={classes.formControl} control={<Switch onChange={handleChange} />} label="My" />
+            <FormControlLabel className={classes.formControl} checked={checked} control={<Switch style={{"color": "#0020ff"}} onChange={handleChange} />} label="My" />
         </FormGroup>
     );
 }

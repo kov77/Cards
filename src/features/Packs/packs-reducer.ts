@@ -113,13 +113,25 @@ export const rangePacks = (min: number, max: number) => (dispatch: Dispatch) => 
 }
 
 export const searchPackTC = (packName: string) => (dispatch: Dispatch) => {
+    packsApi.searchPack(packName)
+        .then(response => dispatch(getPacksData({data: response.data})))
+        .catch((error) => console.log(error))
+}
 
-    if (packName !== "" && packName !== undefined) {
-        debugger
-        packsApi.searchPack(packName)
-            .then(response => dispatch(getPacksData({data: response.data})))
-            .catch((error) => console.log(error))
-    }
+export const searchMyPackTC = (userId: string, packName: string) => (dispatch: Dispatch) => {
+    packsApi.searchMyPack(userId, packName)
+        .then(response => dispatch(getPacksData({data: response.data})))
+        .catch((error) => console.log(error))
+}
+export const searchRangedPackTC = (packName: string,  minCount: number, maxCount: number) => (dispatch: Dispatch) => {
+    packsApi.searchRangedPack(packName, minCount, maxCount)
+        .then(response => dispatch(getPacksData({data: response.data})))
+        .catch((error) => console.log(error))
+}
+export const searchMyRangedPackTC = (userId: string, packName: string,  minCount: number, maxCount: number) => (dispatch: Dispatch) => {
+    packsApi.searchMyRangedPack(userId, packName, minCount, maxCount)
+        .then(response => dispatch(getPacksData({data: response.data})))
+        .catch((error) => console.log(error))
 }
 
 

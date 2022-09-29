@@ -82,6 +82,15 @@ export const packsApi = {
     },
     searchPack(packName: string) {
         return instance.get(`/cards/pack?packName=${packName}`)
+    },
+    searchRangedPack(packName: string, minCount: number, maxCount: number) {
+        return instance.get(`/cards/pack?packName=${packName}&min=${minCount}&max=${maxCount}`)
+    },
+    searchMyPack(userId: string, packName: string ) {
+        return instance.get(`/cards/pack?packName=${packName}&user_id=${userId}`)
+    },
+    searchMyRangedPack(userId: string, packName: string, minCount: number, maxCount: number ) {
+        return instance.get(`/cards/pack?packName=${packName}&user_id=${userId}&min=${minCount}&max=${maxCount}`)
     }
 }
 
