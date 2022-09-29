@@ -66,8 +66,6 @@ export const logoutTC = () => (dispatch: Dispatch) => {
     })
         .catch(error => {
             dispatch(setIsLoggedIn({isLoggedIn: false}))
-            console.log(error)
-            localStorage.clear()
         })
 }
 

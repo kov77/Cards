@@ -4,34 +4,43 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import classes from './ControlledSwitches.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {fetchMyPacksTC, fetchPacksTC} from "../../../features/Packs/packs-reducer";
+import {fetchMyPacksTC, fetchMyRangedPacksTC, rangePacks} from "../../../features/Packs/packs-reducer";
 import {AppStateType} from "../../../app/store";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 export function ControlledSwitches() {
 const dispatch = useDispatch()
-    const userId = useSelector((state: AppStateType) => state.packs.userId)
+    const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
+    const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
+    const userId = useSelector((state: AppStateType) => state.app.userId)
 
-    const[trigger, setTrigger] = useState(false)
-    let maxCardsCount = useSelector((state: AppStateType) => state.packs.maxCardsCount)
-    let minCardsCount = useSelector((state: AppStateType) => state.packs.minCardsCount)
+    let rangeValueFromLocalStorage = localStorage.getItem('rangeCountValue')
+    let switcherValueFromLocalStorage = JSON.parse(localStorage.getItem('switcher')!)
 
-    useEffect(() => {
-        const triggerFromLocalStorage = localStorage.getItem('AllMyTrigger')
-        if(triggerFromLocalStorage) {
-            setTrigger(JSON.parse(triggerFromLocalStorage))
-        }
-    })
+    const[switcherValue, setSwitcherValue] = useState(switcherValueFromLocalStorage)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTrigger(event.target.checked)
-        localStorage.setItem('AllMyTrigger', JSON.stringify(event.target.checked))
-        if(!trigger) {
-            // @ts-ignore
-            dispatch(fetchMyPacksTC(userId))
+        let value = !event.currentTarget.checked
+        setSwitcherValue(value)
+
+        localStorage.setItem('switcher', JSON.stringify(switcherValue))
+
+        if(switcherValue) {
+            if(rangeValueFromLocalStorage) {
+                // @ts-ignore
+                dispatch(fetchMyRangedPacksTC(userId, JSON.parse(rangeValueFromLocalStorage)[0], JSON.parse(rangeValueFromLocalStorage)[1]))
+            } else {
+                // @ts-ignore
+                dispatch(fetchMyPacksTC(userId))
+            }
         } else {
-            // @ts-ignore
-            dispatch(rangePacksTC(minCardsCount, maxCardsCount))
+            if(rangeValueFromLocalStorage) {
+                // @ts-ignore
+                dispatch(rangePacks(JSON.parse(rangeValueFromLocalStorage)[0], JSON.parse(rangeValueFromLocalStorage)[1]))
+            } else {
+                // @ts-ignore
+                dispatch(rangePacks(minValue, maxValue))
+            }
         }
     };
 

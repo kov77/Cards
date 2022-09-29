@@ -77,6 +77,9 @@ export const packsApi = {
     getMyPacks(userId: string) {
         return instance.get(`/cards/pack?user_id=${userId}`)
     },
+    getMyRangedPacks(userId: string, minCount: number, maxCount: number) {
+        return instance.get(`/cards/pack?user_id=${userId}&min=${minCount}&max=${maxCount}`)
+    },
     searchPack(packName: string) {
         return instance.get(`/cards/pack?packName=${packName}`)
     }

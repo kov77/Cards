@@ -1,10 +1,7 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {packsApi} from "../../app/api";
-import store, { AppStateType } from "../../app/store";
-import {useSelector} from "react-redux";
-
-
+import {getUserId} from "../../app/app-reducer";
 
 const initialState = {
     cardPacks: [],
@@ -13,8 +10,8 @@ const initialState = {
     minCardsCount: 0,
     page: 1, // выбранная страница
     pageCount: 10,
-    userId: "",
-    packName: ""
+    packName: "",
+    switcher: false
 }
 
 type packType = {
@@ -60,6 +57,9 @@ const slice = createSlice({
         setPackName(state, action: PayloadAction<{ packName: string }>) {
             return {...state, packName: action.payload.packName}
         },
+        setSwitcher(state, action: PayloadAction<{ switcher: boolean }>) {
+            return {...state, switcher: action.payload.switcher}
+        },
     }
 })
 
@@ -72,7 +72,7 @@ export const {
     setCardPacksTotalCount,
     setCurrentPage,
     setPageCount,
-    setPackName
+    setPackName,
 } = slice.actions
 
 
@@ -90,6 +90,13 @@ export const fetchPacksTC = () => (dispatch: Dispatch) => {
 export const fetchMyPacksTC = (userId:string) => (dispatch: Dispatch) => {
     if(userId !== "") {
         packsApi.getMyPacks(userId)
+            .then(response => dispatch(getPacksData({data: response.data})))
+            .catch((error) => console.log(error))
+    }
+}
+export const fetchMyRangedPacksTC = (userId: string, minCount: number, maxCount: number) => (dispatch: Dispatch) => {
+    if(userId !== "") {
+        packsApi.getMyRangedPacks(userId, minCount, maxCount)
             .then(response => dispatch(getPacksData({data: response.data})))
             .catch((error) => console.log(error))
     }

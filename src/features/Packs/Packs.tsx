@@ -7,37 +7,16 @@ import {PackListTable} from "./PackListTable/PackListTable";
 import Button from '@mui/material/Button';
 import TextField from "@mui/material/TextField";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
-import {useEffect, useRef} from "react";
-import {fetchPacksTC, searchPackTC, setPackName} from "./packs-reducer";
+
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
 
 
 export const Packs = () => {
-    const dispatch = useDispatch()
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
 
     const ohChangeInputHandler = (e: any) => {
         console.log(e.currentTarget.value)
     }
-
-    // const firstUpdate = useRef(true);
-
-    // useEffect(() => {
-    //     if (firstUpdate.current) {
-    //         // @ts-ignore
-    //         dispatch(fetchPacksTC())
-    //         console.log("packs slider")
-    //         firstUpdate.current = false;
-    //         return;
-    //     }
-    // })
-
-    // useEffect(() => {
-    //     // @ts-ignore
-    //     dispatch(fetchPacksTC())
-    //     console.log("packs slider")
-    // }, [])
-
 
     if (!isLoggedIn) {
         return <Navigate to="/login"/>
