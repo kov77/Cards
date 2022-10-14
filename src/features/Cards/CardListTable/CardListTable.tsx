@@ -7,13 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import classes from "../Packs.module.css"
+import classes from "../Cards.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import {fetchPacksTC, setCurrentPage, setPageCount} from "../packs-reducer";
-import {getCardsTC} from "../../Cards/cards-reducer";
-import {Navigate} from "react-router-dom";
-import {useEffect} from "react";
+import Rating from '@mui/material/Rating';
+import { setCurrentPage, setPageCount } from '../../Packs/packs-reducer';
+import {cardType, setPageCardsCount} from "../cards-reducer";
 
 interface Column {
     id: string;
@@ -24,8 +23,8 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'cards', label: 'Cards', minWidth: 100 },
+    { id: 'question', label: 'Question', minWidth: 170 },
+    { id: 'answer', label: 'Answer', minWidth: 100 },
     {
         id: 'last_updated',
         label: 'Last Updated',
@@ -34,80 +33,54 @@ const columns: readonly Column[] = [
         format: (value: number) => value.toLocaleString('en-US'),
     },
     {
-        id: 'created_by',
-        label: 'Created by',
+        id: 'grade',
+        label: 'Grade',
         minWidth: 170,
         align: 'right',
-        format: (value: number) => value.toLocaleString('en-US'),
-    },
-    {
-        id: 'actions',
-        label: 'Actions',
-        minWidth: 170,
-        align: 'right',
-        format: (value: number) => value.toFixed(2),
     },
 ];
 
-type actionsType = "delete" | "edit" | "remove"
-
 interface Data {
     id: string;
-    name: string;
-    cards: number;
-    last_updated: number;
-    created_by: number;
-    actions?: actionsType[];
+    question: string;
+    answer: string
+    last_updated: string;
+    grade: number
 }
 
 function createData(
     id: string,
-    name: string,
-    cards: number,
-    last_updated: number,
-    created_by: number,
-    actions: actionsType[]
+    question: string,
+    answer: string,
+    last_updated: string,
+    grade: number
 ): Data {
-    return { id, name, cards, last_updated, created_by, actions};
+    return { id, question, answer, last_updated, grade };
 }
 
 
 
 
-export function PackListTable() {
-    debugger
+export function CardListTable(props: any) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [ratingValue, setValue] = React.useState<number | null>(2);
 
     const dispatch = useDispatch()
-    const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
-    const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
-    const isRedirect = useSelector((state: AppStateType) => state.packs.isRedirect)
-    const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
 
     let rows: any = []
-
-        if(isRedirect) {
-            return <Navigate to="/Cards"/>
-        }
-
-    cardPacks.forEach((pack: any) => {
-        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name,  ['delete']))
+    props.cardPacks.forEach((card: cardType) => {
+        rows.push(createData(card._id, card.answer,  card.question, card.updated.split('T')[0],  props.cardMaxGrade))
     })
 
-    const onClickPackHandle = (e: any, id: string) => {
-        // @ts-ignore
-        dispatch(getCardsTC(id, pageCardsCount))
-    }
 
     const handleChangePage = (event: unknown, newPage: number) => {
-            debugger
         dispatch(setCurrentPage({page: newPage}))
         setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(setPageCount({pageCount: +event.target.value}))
+        dispatch(setPageCardsCount({pageCardsCount: +event.target.value}))
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
@@ -137,10 +110,19 @@ export function PackListTable() {
                                     <TableRow key={row.id} hover tabIndex={-1}>
                                         {columns.map((column) => {
                                             const value = row[column.id];
-                                            if((typeof value) === "string" || "number") {
-                                                return <TableCell onClick={(e) => onClickPackHandle(e, row.id)} key={column.id} align={column.align}>{value}</TableCell>
+                                            if((typeof value) === "string") {
+                                                return <TableCell key={column.id} align={column.align}>{value}</TableCell>
                                             } else {
-                                                return value.forEach((el: any) => <button key={column.id} className={classes.actionsBtn}>{el}</button>)
+                                                return <TableCell>
+                                                    <Rating
+                                                        name="simple-controlled"
+                                                        value={ratingValue}
+                                                        onChange={(event, newValue) => {
+                                                            setValue(newValue);
+                                                        }}
+                                                        style={{"display": "flex", "justifyContent": "center"}}
+                                                    />
+                                                </TableCell>
                                             }
 
                                         })}
@@ -153,7 +135,7 @@ export function PackListTable() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={cardPacksTotalCount}
+                count={props.cardsTotalCount}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

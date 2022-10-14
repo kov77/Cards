@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 import { registrationReducer } from "../features/Registration/registration-reducer";
 import { appReducer } from "./app-reducer";
 import { packsReducer } from "../features/Packs/packs-reducer";
+import { cardsReducer } from "../features/Cards/cards-reducer";
 
 const rootReducer = combineReducers({
     profile: profileReducer,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     recovery: recoveryReducer,
     registration: registrationReducer,
     app: appReducer,
-    packs: packsReducer
+    packs: packsReducer,
+    cards: cardsReducer
 })
 
 export const store = configureStore({

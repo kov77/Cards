@@ -25,8 +25,10 @@ export const RangeSlider = React.memo(() => {
     const dispatch = useDispatch()
     const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
     const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
+    const pageCount = useSelector((state: AppStateType) => state.packs.pageCount)
     const userId = useSelector((state: AppStateType) => state.app.userId)
     const packName = useSelector((state: AppStateType) => state.packs.packName)
+    const page = useSelector((state: AppStateType) => state.packs.page)
 
     const [value, setValue] = useState([minValue, maxValue])
     const debouncedValue = useDebounce(value, 1000)
@@ -62,43 +64,43 @@ export const RangeSlider = React.memo(() => {
             if (rangeValueFromLocalStorage) {
                 if(packName) {
                     // @ts-ignore
-                    dispatch(searchMyRangedPackTC(userId, packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                    dispatch(searchMyRangedPackTC(userId, packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1], pageCount, page))
                 } else {
                     // @ts-ignore
-                    dispatch(fetchMyRangedPacksTC(userId, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                    dispatch(fetchMyRangedPacksTC(userId, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1], pageCount, page))
                 }
             } else {
                 if(packName) {
                     // @ts-ignore
-                    dispatch(searchMyPackTC(userId, packName))
+                    dispatch(searchMyPackTC(userId, packName, pageCount, page))
                 } else {
                     // @ts-ignore
-                    dispatch(fetchMyPacksTC(userId))
+                    dispatch(fetchMyPacksTC(userId, pageCount, page))
                 }
             }
         } else {
             if (rangeValueFromLocalStorage) {
                 if(packName) {
                     // @ts-ignore
-                    dispatch(searchRangedPackTC(packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                    dispatch(searchRangedPackTC(packName, rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1], pageCount, page))
                 } else {
                     // @ts-ignore
-                    dispatch(rangePacks(rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1]))
+                    dispatch(rangePacks(rangeValueFromLocalStorage[0], rangeValueFromLocalStorage[1], pageCount, page))
                 }
             } else {
                 if(packName) {
                     // @ts-ignore
-                    dispatch(searchRangedPackTC(packName, value[0], value[1]))
+                    dispatch(searchRangedPackTC(packName, value[0], value[1], pageCount, page))
                 } else {
                     // @ts-ignore
-                    dispatch(rangePacks(value[0], value[1]))
+                    dispatch(rangePacks(value[0], value[1], pageCount, page))
                 }
             }
         }
 
 
         console.log("range slider")
-    }, [debouncedValue, packName]);
+    }, [debouncedValue, packName, pageCount, page]);
 
     return (
         <Box sx={{width: "70%"}}>

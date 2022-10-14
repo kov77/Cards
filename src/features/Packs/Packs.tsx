@@ -11,7 +11,7 @@ import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
 import {useEffect, useState } from "react";
 import {useDebounce} from "usehooks-ts";
-import {searchPackTC, setPackName} from "./packs-reducer";
+import { setPackName} from "./packs-reducer";
 
 
 export const Packs = () => {

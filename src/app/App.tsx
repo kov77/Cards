@@ -14,7 +14,7 @@ import { Packs } from '../features/Packs/Packs';
 import {RecoveryModal} from "../features/Recovery/RecoveryModal";
 import {useDispatch} from "react-redux";
 import { initializeAppTC } from './app-reducer';
-import {fetchPacksTC} from "../features/Packs/packs-reducer";
+import {Cards} from "../features/Cards/Cards";
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )
@@ -40,6 +40,7 @@ const App = () => {
                         <Route path={'/error'} element={<Error />} />
                         <Route path={'/'} element={<Packs />} />
                         <Route path={'/recoverymodal'} element={<RecoveryModal />} />
+                        <Route path={'/Cards'} element={<Cards />} />
                     </Routes>
                 </div>
             </div>

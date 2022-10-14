@@ -1,17 +1,17 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {packsApi} from "../../app/api";
-import {getUserId} from "../../app/app-reducer";
 
 const initialState = {
     cardPacks: [],
     cardPacksTotalCount: 0,
     maxCardsCount: 100,
     minCardsCount: 0,
-    page: 1, // выбранная страница
+    page: 0, // выбранная страница
     pageCount: 10,
     packName: "",
-    switcher: false
+    switcher: false,
+    isRedirect: false
 }
 
 type packType = {
@@ -60,6 +60,9 @@ const slice = createSlice({
         setSwitcher(state, action: PayloadAction<{ switcher: boolean }>) {
             return {...state, switcher: action.payload.switcher}
         },
+        redirectToCards(state, action: PayloadAction<{ isRedirect: boolean }>) {
+            return {...state, isRedirect: action.payload.isRedirect}
+        },
     }
 })
 
@@ -73,6 +76,7 @@ export const {
     setCurrentPage,
     setPageCount,
     setPackName,
+    redirectToCards
 } = slice.actions
 
 
@@ -87,23 +91,23 @@ export const fetchPacksTC = () => (dispatch: Dispatch) => {
         })
         .catch((error) => console.log(error))
 }
-export const fetchMyPacksTC = (userId:string) => (dispatch: Dispatch) => {
+export const fetchMyPacksTC = (userId:string, pageCount: number, page: number) => (dispatch: Dispatch) => {
     if(userId !== "") {
-        packsApi.getMyPacks(userId)
+        packsApi.getMyPacks(userId, pageCount, page)
             .then(response => dispatch(getPacksData({data: response.data})))
             .catch((error) => console.log(error))
     }
 }
-export const fetchMyRangedPacksTC = (userId: string, minCount: number, maxCount: number) => (dispatch: Dispatch) => {
+export const fetchMyRangedPacksTC = (userId: string, minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
     if(userId !== "") {
-        packsApi.getMyRangedPacks(userId, minCount, maxCount)
+        packsApi.getMyRangedPacks(userId, minCount, maxCount, pageCount, page)
             .then(response => dispatch(getPacksData({data: response.data})))
             .catch((error) => console.log(error))
     }
 }
 
-export const rangePacks = (min: number, max: number) => (dispatch: Dispatch) => {
-    packsApi.rangePacks(min, max)
+export const rangePacks = (min: number, max: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    packsApi.rangePacks(min, max, pageCount, page)
         .then(response => {
             dispatch(getPacksData({data: response.data}))
             dispatch(setMaxCardsCount({maxCardsCount: response.data.maxCardsCount}))
@@ -112,26 +116,28 @@ export const rangePacks = (min: number, max: number) => (dispatch: Dispatch) => 
         })
 }
 
-export const searchPackTC = (packName: string) => (dispatch: Dispatch) => {
-    packsApi.searchPack(packName)
+export const searchPackTC = (packName: string, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    packsApi.searchPack(packName, pageCount, page)
         .then(response => dispatch(getPacksData({data: response.data})))
         .catch((error) => console.log(error))
 }
 
-export const searchMyPackTC = (userId: string, packName: string) => (dispatch: Dispatch) => {
-    packsApi.searchMyPack(userId, packName)
+export const searchMyPackTC = (userId: string, packName: string, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    packsApi.searchMyPack(userId, packName, pageCount, page)
         .then(response => dispatch(getPacksData({data: response.data})))
         .catch((error) => console.log(error))
 }
-export const searchRangedPackTC = (packName: string,  minCount: number, maxCount: number) => (dispatch: Dispatch) => {
-    packsApi.searchRangedPack(packName, minCount, maxCount)
+export const searchRangedPackTC = (packName: string,  minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    packsApi.searchRangedPack(packName, minCount, maxCount, pageCount, page)
         .then(response => dispatch(getPacksData({data: response.data})))
         .catch((error) => console.log(error))
 }
-export const searchMyRangedPackTC = (userId: string, packName: string,  minCount: number, maxCount: number) => (dispatch: Dispatch) => {
-    packsApi.searchMyRangedPack(userId, packName, minCount, maxCount)
+export const searchMyRangedPackTC = (userId: string, packName: string,  minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    packsApi.searchMyRangedPack(userId, packName, minCount, maxCount, pageCount, page)
         .then(response => dispatch(getPacksData({data: response.data})))
         .catch((error) => console.log(error))
 }
+
+
 
 

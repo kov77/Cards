@@ -71,27 +71,33 @@ export const packsApi = {
     getPacks() {
         return instance.get(`/cards/pack`)
     },
-    rangePacks(minCount: number, maxCount: number) {
-        return instance.get(`/cards/pack?min=${minCount}&max=${maxCount}`)
+    rangePacks(minCount: number, maxCount: number, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&min=${minCount}&max=${maxCount}&pageCount=${pageCount}`)
     },
-    getMyPacks(userId: string) {
-        return instance.get(`/cards/pack?user_id=${userId}`)
+    getMyPacks(userId: string, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&user_id=${userId}&pageCount=${pageCount}`)
     },
-    getMyRangedPacks(userId: string, minCount: number, maxCount: number) {
-        return instance.get(`/cards/pack?user_id=${userId}&min=${minCount}&max=${maxCount}`)
+    getMyRangedPacks(userId: string, minCount: number, maxCount: number, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&user_id=${userId}&min=${minCount}&max=${maxCount}&pageCount=${pageCount}`)
     },
-    searchPack(packName: string) {
-        return instance.get(`/cards/pack?packName=${packName}`)
+    searchPack(packName: string, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&packName=${packName}&pageCount=${pageCount}`)
     },
-    searchRangedPack(packName: string, minCount: number, maxCount: number) {
-        return instance.get(`/cards/pack?packName=${packName}&min=${minCount}&max=${maxCount}`)
+    searchRangedPack(packName: string, minCount: number, maxCount: number, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&packName=${packName}&min=${minCount}&max=${maxCount}&pageCount=${pageCount}`)
     },
-    searchMyPack(userId: string, packName: string ) {
-        return instance.get(`/cards/pack?packName=${packName}&user_id=${userId}`)
+    searchMyPack(userId: string, packName: string, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&packName=${packName}&user_id=${userId}&pageCount=${pageCount}`)
     },
-    searchMyRangedPack(userId: string, packName: string, minCount: number, maxCount: number ) {
-        return instance.get(`/cards/pack?packName=${packName}&user_id=${userId}&min=${minCount}&max=${maxCount}`)
-    }
+    searchMyRangedPack(userId: string, packName: string, minCount: number, maxCount: number, pageCount: number, page: number) {
+        return instance.get(`/cards/pack?page=${page}&packName=${packName}&user_id=${userId}&min=${minCount}&max=${maxCount}$pageCount=${pageCount}`)
+    },
+}
+
+export const cardsAPI = {
+    getCards(id: string, pageCardsCount: number) {
+        return instance.get(`/cards/card?cardsPack_id=${id}&pageCount=${pageCardsCount}`)
+    },
 }
 
 
