@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {cardsAPI, packsApi} from "../../app/api";
 import {redirectToCards} from "../Packs/packs-reducer";
+import {setStatus} from "../../app/app-reducer";
 
 const initialState = {
     cardPacks: [],
@@ -70,6 +71,7 @@ export const {
 
 // Thunks
 export const getCardsTC = (id: string, pageCardsCount: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: "loading"}))
     cardsAPI.getCards(id, pageCardsCount)
         .then(response => {
             dispatch(getCardsData({cardPacks: response.data.cards}))
@@ -77,6 +79,7 @@ export const getCardsTC = (id: string, pageCardsCount: number) => (dispatch: Dis
             dispatch(getMaxGrade({maxGrade: response.data.maxGrade}))
             dispatch(getMinGrade({minGrade: response.data.minGrade}))
             dispatch(redirectToCards({isRedirect: true}))
+            dispatch(setStatus({status: "success"}))
         })
         .catch((error) => console.log(error))
 }

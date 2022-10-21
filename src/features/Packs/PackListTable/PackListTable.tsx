@@ -10,10 +10,10 @@ import TableRow from '@mui/material/TableRow';
 import classes from "../Packs.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import {fetchPacksTC, setCurrentPage, setPageCount} from "../packs-reducer";
+import {deletePackTC, fetchPacksTC, setCurrentPage, setPageCount} from "../packs-reducer";
 import {getCardsTC} from "../../Cards/cards-reducer";
 import {Navigate} from "react-router-dom";
-import {useEffect} from "react";
+
 
 interface Column {
     id: string;
@@ -60,6 +60,7 @@ interface Data {
     actions?: actionsType[];
 }
 
+
 function createData(
     id: string,
     name: string,
@@ -73,44 +74,31 @@ function createData(
 
 
 
-
-export function PackListTable() {
-    debugger
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
+export const PackListTable = React.memo((() => {
     const dispatch = useDispatch()
     const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
-    const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
     const isRedirect = useSelector((state: AppStateType) => state.packs.isRedirect)
     const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
 
     let rows: any = []
 
-        if(isRedirect) {
-            return <Navigate to="/Cards"/>
-        }
-
     cardPacks.forEach((pack: any) => {
         rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name,  ['delete']))
     })
+
+    if(isRedirect) {
+        return <Navigate to="/Cards"/>
+    }
 
     const onClickPackHandle = (e: any, id: string) => {
         // @ts-ignore
         dispatch(getCardsTC(id, pageCardsCount))
     }
 
-    const handleChangePage = (event: unknown, newPage: number) => {
-            debugger
-        dispatch(setCurrentPage({page: newPage}))
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(setPageCount({pageCount: +event.target.value}))
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    const deleteButtonHandler = (id: string) => {
+        // @ts-ignore
+        dispatch(deletePackTC(id))
+    }
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -131,16 +119,17 @@ export function PackListTable() {
                     </TableHead>
                     <TableBody>
                         {rows
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((row: any) => {
                                 return (
                                     <TableRow key={row.id} hover tabIndex={-1}>
                                         {columns.map((column) => {
+
                                             const value = row[column.id];
-                                            if((typeof value) === "string" || "number") {
+                                            if((typeof value) !== "object") {
                                                 return <TableCell onClick={(e) => onClickPackHandle(e, row.id)} key={column.id} align={column.align}>{value}</TableCell>
                                             } else {
-                                                return value.forEach((el: any) => <button key={column.id} className={classes.actionsBtn}>{el}</button>)
+                                                return <TableCell> <button key={column.id} onClick={() => deleteButtonHandler(row.id)} className={classes.actionsBtn}>{value}</button> </TableCell>
                                             }
 
                                         })}
@@ -150,15 +139,6 @@ export function PackListTable() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={cardPacksTotalCount}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
         </Paper>
     );
-}
+}))

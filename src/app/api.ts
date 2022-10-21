@@ -92,6 +92,12 @@ export const packsApi = {
     searchMyRangedPack(userId: string, packName: string, minCount: number, maxCount: number, pageCount: number, page: number) {
         return instance.get(`/cards/pack?page=${page}&packName=${packName}&user_id=${userId}&min=${minCount}&max=${maxCount}$pageCount=${pageCount}`)
     },
+    addNewPack(name: string, privatePack: boolean) {
+        return instance.post(`cards/pack`, {cardsPack: {name, private: privatePack}})
+    },
+    deletePack(packId: string) {
+        return instance.delete(`cards/pack?id=${packId}`)
+    }
 }
 
 export const cardsAPI = {

@@ -11,12 +11,18 @@ import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
 import {useEffect, useState } from "react";
 import {useDebounce} from "usehooks-ts";
-import { setPackName} from "./packs-reducer";
+import {addNewPackTC, setCurrentPage, setPackName, setPageCount} from "./packs-reducer";
+import TablePagination from "@mui/material/TablePagination";
 
 
 export const Packs = () => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
+    const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
+
     const dispatch = useDispatch()
+
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const [value, setValue] = useState<string>('')
     const debouncedValue = useDebounce<string>(value, 1000)
@@ -31,6 +37,25 @@ export const Packs = () => {
 
     if (!isLoggedIn) {
         return <Navigate to="/login"/>
+    }
+
+
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+
+        dispatch(setCurrentPage({page: newPage + 1}))
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        dispatch(setPageCount({pageCount: +event.target.value}))
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
+
+    const addButtonHandler = () => {
+        // @ts-ignore
+        dispatch(addNewPackTC( "kukan", true))
     }
 
     return (
@@ -51,9 +76,18 @@ export const Packs = () => {
                 }>
                     <TextField onChange={e => ohChangeInputHandler(e)} size={"small"} className={classes.searchInput} id="outlined-basic" label="Search"
                                variant="outlined"/>
-                    <Button className={classes.addNewPackBtn} variant="contained">Add new Pack</Button>
+                    <Button className={classes.addNewPackBtn} onClick={addButtonHandler} variant="contained">Add new Pack</Button>
                 </div>
-                <PackListTable/>
+                <PackListTable />
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={cardPacksTotalCount}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
             </div>
         </div>
     )

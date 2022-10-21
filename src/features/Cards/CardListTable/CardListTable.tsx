@@ -68,15 +68,20 @@ export function CardListTable(props: any) {
 
     const dispatch = useDispatch()
 
+    const pageFromLocalStorage = localStorage.getItem('currentPage')
+
     let rows: any = []
     props.cardPacks.forEach((card: cardType) => {
         rows.push(createData(card._id, card.answer,  card.question, card.updated.split('T')[0],  props.cardMaxGrade))
     })
 
 
+    // const handleChangePage = (event: unknown, newPage: number) => {
+    //     localStorage.setItem('currentPage', JSON.stringify(newPage))
+    //     dispatch(setCurrentPage({page: newPage}))
+    //     setPage(newPage);
+    // };
     const handleChangePage = (event: unknown, newPage: number) => {
-        dispatch(setCurrentPage({page: newPage}))
-        setPage(newPage);
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,6 +89,10 @@ export function CardListTable(props: any) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    if(pageFromLocalStorage !== "" && pageFromLocalStorage !== null) {
+        setPage(+JSON.parse(pageFromLocalStorage))
+    }
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

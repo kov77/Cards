@@ -1,17 +1,18 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {packsApi} from "../../app/api";
+import {setStatus} from "../../app/app-reducer";
 
 const initialState = {
     cardPacks: [],
     cardPacksTotalCount: 0,
     maxCardsCount: 100,
     minCardsCount: 0,
-    page: 0, // выбранная страница
+    page: 1, // выбранная страница
     pageCount: 10,
     packName: "",
     switcher: false,
-    isRedirect: false
+    isRedirect: false,
 }
 
 type packType = {
@@ -83,61 +84,136 @@ export const {
 // Thunks
 
 export const fetchPacksTC = () => (dispatch: Dispatch) => {
-
+    dispatch(setStatus({status: 'loading'}))
     packsApi.getPacks()
         .then(response => {
             dispatch(getPacksData({data: response.data}))
             dispatch(setCardPacksTotalCount({cardPacksTotalCount: response.data.cardPacksTotalCount}))
+            dispatch(setStatus({status: 'success'}))
         })
-        .catch((error) => console.log(error))
-}
+        .catch((error) => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })}
+
 export const fetchMyPacksTC = (userId:string, pageCount: number, page: number) => (dispatch: Dispatch) => {
     if(userId !== "") {
+        dispatch(setStatus({status: 'loading'}))
         packsApi.getMyPacks(userId, pageCount, page)
-            .then(response => dispatch(getPacksData({data: response.data})))
-            .catch((error) => console.log(error))
+            .then(response => {
+                dispatch(getPacksData({data: response.data}))
+                dispatch(setStatus({status: 'success'}))
+
+            })
+            .catch((error) => {
+                dispatch(setStatus({status: 'failed'}))
+                console.log(error)
+            })
     }
 }
 export const fetchMyRangedPacksTC = (userId: string, minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
     if(userId !== "") {
+        dispatch(setStatus({status: 'loading'}))
         packsApi.getMyRangedPacks(userId, minCount, maxCount, pageCount, page)
-            .then(response => dispatch(getPacksData({data: response.data})))
-            .catch((error) => console.log(error))
+            .then(response => {
+                dispatch(getPacksData({data: response.data}))
+                dispatch(setStatus({status: 'success'}))
+            })
+            .catch((error) => {
+                dispatch(setStatus({status: 'failed'}))
+                console.log(error)
+            })
     }
 }
 
 export const rangePacks = (min: number, max: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
     packsApi.rangePacks(min, max, pageCount, page)
         .then(response => {
             dispatch(getPacksData({data: response.data}))
             dispatch(setMaxCardsCount({maxCardsCount: response.data.maxCardsCount}))
             dispatch(setMinCardsCount({minCardsCount: response.data.minCardsCount}))
             dispatch(setCardPacksTotalCount({cardPacksTotalCount: response.data.cardPacksTotalCount}))
+            dispatch(setStatus({status: 'success'}))
+
         })
 }
 
 export const searchPackTC = (packName: string, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
     packsApi.searchPack(packName, pageCount, page)
-        .then(response => dispatch(getPacksData({data: response.data})))
-        .catch((error) => console.log(error))
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch((error) => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
 }
 
 export const searchMyPackTC = (userId: string, packName: string, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
     packsApi.searchMyPack(userId, packName, pageCount, page)
-        .then(response => dispatch(getPacksData({data: response.data})))
-        .catch((error) => console.log(error))
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch((error) => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
 }
 export const searchRangedPackTC = (packName: string,  minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
     packsApi.searchRangedPack(packName, minCount, maxCount, pageCount, page)
-        .then(response => dispatch(getPacksData({data: response.data})))
-        .catch((error) => console.log(error))
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch((error) => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
 }
 export const searchMyRangedPackTC = (userId: string, packName: string,  minCount: number, maxCount: number, pageCount: number, page: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
     packsApi.searchMyRangedPack(userId, packName, minCount, maxCount, pageCount, page)
-        .then(response => dispatch(getPacksData({data: response.data})))
-        .catch((error) => console.log(error))
+        .then(response => {
+            dispatch(getPacksData({data: response.data}))
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch((error) => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
 }
 
+export const addNewPackTC = (name: string, privatePack: boolean) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
 
+    packsApi.addNewPack(name, privatePack)
+        .then(response => {
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch(error => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
+}
+
+export const deletePackTC = (packId: string) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
+
+    packsApi.deletePack(packId)
+        .then(response => {
+            dispatch(setStatus({status: 'success'}))
+        })
+        .catch(error => {
+            dispatch(setStatus({status: 'failed'}))
+            console.log(error)
+        })
+
+}
 
 
