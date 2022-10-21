@@ -7,9 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import classes from "../Cards.module.css"
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../../app/store";
 import Rating from '@mui/material/Rating';
 import { setCurrentPage, setPageCount } from '../../Packs/packs-reducer';
 import {cardType, setPageCardsCount} from "../cards-reducer";
@@ -82,6 +80,7 @@ export function CardListTable(props: any) {
     //     setPage(newPage);
     // };
     const handleChangePage = (event: unknown, newPage: number) => {
+        dispatch(setCurrentPage({page: newPage}))
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +89,9 @@ export function CardListTable(props: any) {
         setPage(0);
     };
 
-    if(pageFromLocalStorage !== "" && pageFromLocalStorage !== null) {
-        setPage(+JSON.parse(pageFromLocalStorage))
-    }
+    // if(pageFromLocalStorage !== "" && pageFromLocalStorage !== null) {
+    //     setPage(+JSON.parse(pageFromLocalStorage))
+    // }
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>

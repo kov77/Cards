@@ -77,7 +77,8 @@ export const {
     setCurrentPage,
     setPageCount,
     setPackName,
-    redirectToCards
+    redirectToCards,
+    setSwitcher
 } = slice.actions
 
 
@@ -208,6 +209,7 @@ export const deletePackTC = (packId: string) => (dispatch: Dispatch) => {
     packsApi.deletePack(packId)
         .then(response => {
             dispatch(setStatus({status: 'success'}))
+
         })
         .catch(error => {
             dispatch(setStatus({status: 'failed'}))

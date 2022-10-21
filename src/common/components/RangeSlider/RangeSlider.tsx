@@ -10,7 +10,8 @@ import {
     searchMyRangedPackTC,
     searchRangedPackTC,
     setMaxCardsCount,
-    setMinCardsCount
+    setMinCardsCount,
+    setSwitcher
 } from '../../../features/Packs/packs-reducer';
 import {useEffect, useRef, useState} from "react";
 import {AppStateType} from '../../../app/store';
@@ -61,6 +62,10 @@ export const RangeSlider = React.memo(() => {
         }
 
         if(switcherValueFromLocalStorage) {
+            dispatch(setSwitcher({switcher: switcherValueFromLocalStorage}))
+        }
+
+        if(switcherValueFromLocalStorage) {
             if (rangeValueFromLocalStorage) {
                 if(packName) {
                     // @ts-ignore
@@ -97,10 +102,7 @@ export const RangeSlider = React.memo(() => {
                 }
             }
         }
-
-
-        console.log("range slider")
-    }, [debouncedValue, packName, pageCount, page]);
+        }, [debouncedValue, packName, pageCount, page]);
 
     return (
         <Box sx={{width: "70%"}}>
