@@ -5,14 +5,14 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import classes from "../Packs.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import {deletePackTC, fetchPacksTC, setCurrentPage, setPageCount} from "../packs-reducer";
+import {deletePackTC, editPackTC, setIsEditModalActive, setIsModalActive, setNewPackName} from "../packs-reducer";
 import {getCardsTC} from "../../Cards/cards-reducer";
 import {Navigate} from "react-router-dom";
+import {BasicModal} from "../../Modal/Modal";
 
 
 interface Column {
@@ -24,8 +24,8 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'cards', label: 'Cards', minWidth: 100 },
+    {id: 'name', label: 'Name', minWidth: 170},
+    {id: 'cards', label: 'Cards', minWidth: 100},
     {
         id: 'last_updated',
         label: 'Last Updated',
@@ -49,7 +49,7 @@ const columns: readonly Column[] = [
     },
 ];
 
-type actionsType = "delete" | "edit" | "remove"
+type actionsType = "delete" | "edit" | "learn"
 
 interface Data {
     id: string;
@@ -69,9 +69,8 @@ function createData(
     created_by: number,
     actions: actionsType[]
 ): Data {
-    return { id, name, cards, last_updated, created_by, actions};
+    return {id, name, cards, last_updated, created_by, actions};
 }
-
 
 
 export const PackListTable = React.memo((() => {
@@ -79,18 +78,26 @@ export const PackListTable = React.memo((() => {
     const cardPacks = useSelector((state: AppStateType) => state.packs.cardPacks)
     const isRedirect = useSelector((state: AppStateType) => state.packs.isRedirect)
     const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
+    const userId = useSelector((state: AppStateType) => state.app.userId)
+    const isEditModalActive = useSelector((state: AppStateType) => state.packs.isEditModalActive)
+    const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
+
 
     let rows: any = []
 
     cardPacks.forEach((pack: any) => {
-        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name,  ['delete']))
+        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, ["delete", "edit", "learn"]))
     })
 
-    if(isRedirect) {
+    if (isRedirect) {
         return <Navigate to="/Cards"/>
     }
 
     const onClickPackHandle = (e: any, id: string) => {
+        // @ts-ignore
+        dispatch(getCardsTC(id, pageCardsCount))
+    }
+    const onClickEditPackHandler = () => {
         // @ts-ignore
         dispatch(getCardsTC(id, pageCardsCount))
     }
@@ -99,46 +106,68 @@ export const PackListTable = React.memo((() => {
         // @ts-ignore
         dispatch(deletePackTC(id))
     }
+    const editButtonHandler = (packId: string) => {
+        // @ts-ignore
+        dispatch(editPackTC(packId, newPackName))
+        dispatch(setNewPackName({newPackName: ""}))
+        isEditModalActive ? dispatch(setIsEditModalActive({isEditModalActive: false})) : dispatch(setIsEditModalActive({isEditModalActive: true}))
 
-    return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows
-                            // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row: any) => {
-                                return (
-                                    <TableRow key={row.id} hover tabIndex={-1}>
-                                        {columns.map((column) => {
+    }
+    if (isEditModalActive) {
+        return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} name={"Edit Pack"} placeholderName={"Enter New Pack Name"} btnName={"Save"} open={true}/>
+    } else {
+        return (
+            <Paper sx={{width: '100%', overflow: 'hidden'}}>
+                <TableContainer sx={{maxHeight: 440}}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map((column) => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{minWidth: column.minWidth}}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows
+                                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row: any) => {
+                                    return (
+                                        <TableRow key={row.id} hover tabIndex={-1}>
+                                            {columns.map((column) => {
 
-                                            const value = row[column.id];
-                                            if((typeof value) !== "object") {
-                                                return <TableCell onClick={(e) => onClickPackHandle(e, row.id)} key={column.id} align={column.align}>{value}</TableCell>
-                                            } else {
-                                                return <TableCell> <button key={column.id} onClick={() => deleteButtonHandler(row.id)} className={classes.actionsBtn}>{value}</button> </TableCell>
-                                            }
+                                                const value = row[column.id];
+                                                if ((typeof value) !== "object") {
+                                                    return <TableCell onClick={(e) => onClickPackHandle(e, row.id)}
+                                                                      key={column.id}
+                                                                      align={column.align}>{value}</TableCell>
+                                                } else {
+                                                    return <TableCell>
+                                                        <button key={column.id}
+                                                                onClick={() => deleteButtonHandler(row.id)}
+                                                                className={classes.actionsBtn}>{value[0]}</button>
+                                                        <button key={column.id}
+                                                                onClick={() => editButtonHandler(row.id)}
+                                                                className={classes.actionsBtn}>{value[1]}</button>
+                                                        <button key={column.id}
+                                                                onClick={(e) => onClickPackHandle(e, row.id)}
+                                                                className={classes.actionsBtn}>{value[2]}</button>
+                                                    </TableCell>
+                                                }
 
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Paper>
-    );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+        );
+    }
 }))

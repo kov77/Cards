@@ -8,7 +8,7 @@ import {
     fetchMyRangedPacksTC,
     rangePacks, searchMyPackTC,
     searchMyRangedPackTC,
-    searchRangedPackTC,
+    searchRangedPackTC, setIsPackChanged,
     setMaxCardsCount,
     setMinCardsCount,
     setSwitcher
@@ -30,6 +30,7 @@ export const RangeSlider = React.memo(() => {
     const userId = useSelector((state: AppStateType) => state.app.userId)
     const packName = useSelector((state: AppStateType) => state.packs.packName)
     const page = useSelector((state: AppStateType) => state.packs.page)
+    const isPackChanged = useSelector((state: AppStateType) => state.packs.isPackChanged)
 
     const [value, setValue] = useState([minValue, maxValue])
     const debouncedValue = useDebounce(value, 1000)
@@ -54,6 +55,7 @@ export const RangeSlider = React.memo(() => {
 
     const firstUpdate = useRef(true);
     useEffect(() => {
+        dispatch(setIsPackChanged({isPackChanged: false}))
         let rangeValueFromLocalStorage = JSON.parse(localStorage.getItem('rangeCountValue')!)
         let switcherValueFromLocalStorage = JSON.parse(localStorage.getItem('switcher')!)
         if (firstUpdate.current) {
@@ -102,7 +104,7 @@ export const RangeSlider = React.memo(() => {
                 }
             }
         }
-        }, [debouncedValue, packName, pageCount, page]);
+        }, [debouncedValue, packName, pageCount, page, isPackChanged]);
 
     return (
         <Box sx={{width: "70%"}}>

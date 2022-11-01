@@ -9,15 +9,27 @@ import TextField from "@mui/material/TextField";
 import {RangeSlider} from "../../common/components/RangeSlider/RangeSlider";
 
 import {ControlledSwitches} from "../../common/components/ControlledSwitches/ControlledSwitches";
-import {useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import {useDebounce} from "usehooks-ts";
-import {addNewPackTC, setCurrentPage, setPackName, setPageCount} from "./packs-reducer";
+import {
+    addNewPackTC,
+    setCurrentPage,
+    setIsModalActive,
+    setNewPackName,
+    setPackName,
+    setPageCount
+} from "./packs-reducer";
 import TablePagination from "@mui/material/TablePagination";
+import {BasicModal} from "../Modal/Modal";
 
 
 export const Packs = () => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
     const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
+    const isModalActive = useSelector((state: AppStateType) => state.packs.isModalActive)
+    const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
+    const inputPrivateValue = useSelector((state: AppStateType) => state.packs.inputPrivateValue)
+
 
     const dispatch = useDispatch()
 
@@ -26,6 +38,8 @@ export const Packs = () => {
 
     const [value, setValue] = useState<string>('')
     const debouncedValue = useDebounce<string>(value, 1000)
+
+
 
     const ohChangeInputHandler = (e: any) => {
         setValue(e.currentTarget.value)
@@ -38,7 +52,6 @@ export const Packs = () => {
     if (!isLoggedIn) {
         return <Navigate to="/login"/>
     }
-
 
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -54,41 +67,56 @@ export const Packs = () => {
     };
 
     const addButtonHandler = () => {
-        // @ts-ignore
-        dispatch(addNewPackTC( "kukan", true))
+        isModalActive ? dispatch(setIsModalActive({isModalActive: false})) : dispatch(setIsModalActive({isModalActive: true}))
     }
 
-    return (
-        <div className={classes.packsWrp}>
-            <div className={classes.packsSideBar}>
-                <h5>Show packs cards</h5>
-                <div style={{display: "flex", justifyContent: "center"}}>
-                    <ControlledSwitches/>
-                </div>
-                <div className={classes.rangeSlider}>
-                    <h5>Number of cards</h5>
-                    <RangeSlider />
-                </div>
-            </div>
+    const onClickAddPackHandler = () => {
+        // @ts-ignore
+        dispatch(addNewPackTC( newPackName, inputPrivateValue))
+        dispatch(setNewPackName({newPackName: ""}))
+        dispatch(setIsModalActive({isModalActive: false}))
+    }
 
-            <div className={classes.packsList}>
-                <div className={classes.packsListAdd
-                }>
-                    <TextField onChange={e => ohChangeInputHandler(e)} size={"small"} className={classes.searchInput} id="outlined-basic" label="Search"
-                               variant="outlined"/>
-                    <Button className={classes.addNewPackBtn} onClick={addButtonHandler} variant="contained">Add new Pack</Button>
+    if (isModalActive) {
+        return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()} name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"} open={true}/>
+    } else {
+        return (
+            <div className={classes.packsWrp}>
+                <div className={classes.packsSideBar}>
+                    <h5>Show packs cards</h5>
+                    <div style={{display: "flex", justifyContent: "center"}}>
+                        <ControlledSwitches/>
+                    </div>
+                    <div className={classes.rangeSlider}>
+                        <h5>Number of cards</h5>
+                        <RangeSlider/>
+                    </div>
                 </div>
-                <PackListTable />
-                <TablePagination
-                    rowsPerPageOptions={[10, 25, 100]}
-                    component="div"
-                    count={cardPacksTotalCount}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+
+                <div className={classes.packsList}>
+                    <div className={classes.packsListAdd
+                    }>
+                        <TextField onChange={e => ohChangeInputHandler(e)} size={"small"}
+                                   className={classes.searchInput} id="outlined-basic" label="Search"
+                                   variant="outlined"/>
+                        <Button className={classes.addNewPackBtn} onClick={addButtonHandler} variant="contained">Add new
+                            Pack</Button>
+                    </div>
+                    <PackListTable/>
+                    <TablePagination
+                        rowsPerPageOptions={[10, 25, 100]}
+                        component="div"
+                        count={cardPacksTotalCount}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </div>
             </div>
-        </div>
-    )
+        )
+
+    }
+
+
 }

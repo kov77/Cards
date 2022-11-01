@@ -13,6 +13,11 @@ const initialState = {
     packName: "",
     switcher: false,
     isRedirect: false,
+    newPackName: "",
+    isModalActive: false,
+    isEditModalActive: false,
+    isPackChanged: false,
+    inputPrivateValue: false
 }
 
 type packType = {
@@ -64,6 +69,22 @@ const slice = createSlice({
         redirectToCards(state, action: PayloadAction<{ isRedirect: boolean }>) {
             return {...state, isRedirect: action.payload.isRedirect}
         },
+        setNewPackName(state, action: PayloadAction<{ newPackName: string }>) {
+            return {...state, newPackName: action.payload.newPackName}
+        },
+        setIsModalActive(state, action: PayloadAction<{ isModalActive: boolean }>) {
+            return {...state, isModalActive: action.payload.isModalActive}
+        },
+        setIsEditModalActive(state, action: PayloadAction<{ isEditModalActive: boolean }>) {
+            return {...state, isEditModalActive: action.payload.isEditModalActive}
+        },
+        setIsPackChanged(state, action: PayloadAction<{ isPackChanged: boolean }>) {
+            return {...state, isPackChanged: action.payload.isPackChanged}
+        },
+        setInputPrivateValue(state, action: PayloadAction<{ inputPrivateValue: boolean }>) {
+            return {...state, inputPrivateValue: action.payload.inputPrivateValue}
+        },
+
     }
 })
 
@@ -78,7 +99,12 @@ export const {
     setPageCount,
     setPackName,
     redirectToCards,
-    setSwitcher
+    setSwitcher,
+    setNewPackName,
+    setIsModalActive,
+    setIsPackChanged,
+    setIsEditModalActive,
+    setInputPrivateValue
 } = slice.actions
 
 
@@ -209,6 +235,7 @@ export const deletePackTC = (packId: string) => (dispatch: Dispatch) => {
     packsApi.deletePack(packId)
         .then(response => {
             dispatch(setStatus({status: 'success'}))
+            dispatch(setIsPackChanged({isPackChanged: true}))
 
         })
         .catch(error => {
@@ -216,6 +243,19 @@ export const deletePackTC = (packId: string) => (dispatch: Dispatch) => {
             console.log(error)
         })
 
+}
+
+export const editPackTC = (packId: string, newName: string) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: 'loading'}))
+
+    packsApi.editPack(packId, newName)
+        .then(response => {
+            dispatch(setStatus({status: 'success'}))
+            dispatch(setIsPackChanged({isPackChanged: true}))
+        })
+        .catch(error => {
+            dispatch(setStatus({status: 'failed'}))
+        })
 }
 
 

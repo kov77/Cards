@@ -44,6 +44,11 @@
 
 .actionsBtn {
     margin-left: 20px;
-    color: red;
     cursor: pointer;
 }
+
+.deleteBtn {
+    color: red;
+}
+
+

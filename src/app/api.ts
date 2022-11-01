@@ -97,7 +97,13 @@ export const packsApi = {
     },
     deletePack(packId: string) {
         return instance.delete(`cards/pack?id=${packId}`)
-    }
+    },
+    editPack(packId: string, newName: string) {
+        return instance.put('cards/pack', {cardsPack: {
+                _id: packId,
+                name: newName,
+            }})
+    },
 }
 
 export const cardsAPI = {
