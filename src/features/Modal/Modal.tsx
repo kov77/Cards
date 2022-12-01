@@ -35,7 +35,6 @@ export function BasicModal(props: any) {
     const dispatch = useDispatch()
 
     const onChangeInputHandler = (e: any) => {
-        console.log()
         dispatch(setNewPackName({newPackName: e.currentTarget.value}))
     }
 

@@ -86,7 +86,7 @@ export const PackListTable = React.memo((() => {
     let rows: any = []
 
     cardPacks.forEach((pack: any) => {
-        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, ["delete", "edit", "learn"]))
+        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, (pack.private ? ["delete", "edit", "learn"] :  ["learn"])))
     })
 
     if (isRedirect) {
@@ -111,7 +111,6 @@ export const PackListTable = React.memo((() => {
         dispatch(editPackTC(packId, newPackName))
         dispatch(setNewPackName({newPackName: ""}))
         isEditModalActive ? dispatch(setIsEditModalActive({isEditModalActive: false})) : dispatch(setIsEditModalActive({isEditModalActive: true}))
-
     }
     if (isEditModalActive) {
         return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} name={"Edit Pack"} placeholderName={"Enter New Pack Name"} btnName={"Save"} open={true}/>
@@ -151,12 +150,12 @@ export const PackListTable = React.memo((() => {
                                                         <button key={column.id}
                                                                 onClick={() => deleteButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[0]}</button>
-                                                        <button key={column.id}
+                                                        {value[1] && <button key={column.id}
                                                                 onClick={() => editButtonHandler(row.id)}
-                                                                className={classes.actionsBtn}>{value[1]}</button>
-                                                        <button key={column.id}
+                                                                className={classes.actionsBtn}>{value[1]}</button>}
+                                                        {value[2] && <button key={column.id}
                                                                 onClick={(e) => onClickPackHandle(e, row.id)}
-                                                                className={classes.actionsBtn}>{value[2]}</button>
+                                                                className={classes.actionsBtn}>{value[2]}</button>}
                                                     </TableCell>
                                                 }
 

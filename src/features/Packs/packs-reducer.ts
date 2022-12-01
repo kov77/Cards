@@ -17,7 +17,8 @@ const initialState = {
     isModalActive: false,
     isEditModalActive: false,
     isPackChanged: false,
-    inputPrivateValue: false
+    inputPrivateValue: false,
+    isPackPrivate: false
 }
 
 type packType = {
@@ -84,6 +85,9 @@ const slice = createSlice({
         setInputPrivateValue(state, action: PayloadAction<{ inputPrivateValue: boolean }>) {
             return {...state, inputPrivateValue: action.payload.inputPrivateValue}
         },
+        setIsPackPrivate(state, action: PayloadAction<{ isPackPrivate: boolean }>) {
+            return {...state, isPackPrivate: action.payload.isPackPrivate}
+        },
 
     }
 })
@@ -104,7 +108,8 @@ export const {
     setIsModalActive,
     setIsPackChanged,
     setIsEditModalActive,
-    setInputPrivateValue
+    setInputPrivateValue,
+    setIsPackPrivate
 } = slice.actions
 
 
