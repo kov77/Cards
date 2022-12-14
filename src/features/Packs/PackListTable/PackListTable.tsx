@@ -147,15 +147,15 @@ export const PackListTable = React.memo((() => {
                                                                       align={column.align}>{value}</TableCell>
                                                 } else {
                                                     return <TableCell>
-                                                        <button key={column.id}
+                                                        {value[2] && <button key={column.id}
                                                                 onClick={() => deleteButtonHandler(row.id)}
-                                                                className={classes.actionsBtn}>{value[0]}</button>
+                                                                className={classes.actionsBtn}>{value[2]}</button>}
                                                         {value[1] && <button key={column.id}
                                                                 onClick={() => editButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[1]}</button>}
-                                                        {value[2] && <button key={column.id}
+                                                        {value[0] && <button key={column.id}
                                                                 onClick={(e) => onClickPackHandle(e, row.id)}
-                                                                className={classes.actionsBtn}>{value[2]}</button>}
+                                                                className={classes.actionsBtn}>{value[0]}</button>}
                                                     </TableCell>
                                                 }
 

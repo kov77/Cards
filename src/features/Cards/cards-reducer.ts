@@ -11,7 +11,9 @@ const initialState = {
     pageCardsCount: 10, // total pages
     packName: "",
     maxGrade: 0,
-    minGrade: 0
+    minGrade: 0,
+    isCardsModalActive: false,
+    setNewCardName: ""
 }
 
  export type cardType = {
@@ -54,6 +56,12 @@ const slice = createSlice({
         },
         setPageCardsCount(state, action: any) {
             return {...state, pageCardsCount: action.payload.pageCardsCount}
+        },
+        setIsCardsModalActive(state, action: any) {
+            return {...state, isCardsModalActive: action.payload.isCardsModalActive}
+        },
+        setNewCardName(state, action: any) {
+            return {...state, newCardName: action.payload.newCardName}
         }
     }
 })
@@ -66,6 +74,8 @@ export const {
     getMaxGrade,
     getMinGrade,
     setPageCardsCount,
+    setIsCardsModalActive,
+    setNewCardName
 } = slice.actions
 
 
