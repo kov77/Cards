@@ -110,6 +110,9 @@ export const cardsAPI = {
     getCards(id: string, pageCardsCount: number) {
         return instance.get(`/cards/card?cardsPack_id=${id}&pageCount=${pageCardsCount}`)
     },
+    postNewCard(packId: string, question: string, answer: string) {
+        return instance.post('/cards/card', {card: {cardsPack_id:packId, question:question, answer:answer}})
+    },
 }
 
 

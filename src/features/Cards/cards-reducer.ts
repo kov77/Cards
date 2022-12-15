@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
-import {cardsAPI, packsApi} from "../../app/api";
+import {cardsAPI} from "../../app/api";
 import {redirectToCards} from "../Packs/packs-reducer";
 import {setStatus} from "../../app/app-reducer";
 
@@ -13,7 +13,8 @@ const initialState = {
     maxGrade: 0,
     minGrade: 0,
     isCardsModalActive: false,
-    setNewCardName: ""
+    newQuestion: "",
+    newAnswer: ""
 }
 
  export type cardType = {
@@ -60,8 +61,11 @@ const slice = createSlice({
         setIsCardsModalActive(state, action: any) {
             return {...state, isCardsModalActive: action.payload.isCardsModalActive}
         },
-        setNewCardName(state, action: any) {
-            return {...state, newCardName: action.payload.newCardName}
+        setNewQuestion(state, action: any) {
+            return {...state, newQuestion: action.payload.newQuestion}
+        },
+        setNewAnswer(state, action: any) {
+            return {...state, newAnswer: action.payload.newAnswer}
         }
     }
 })
@@ -75,7 +79,8 @@ export const {
     getMinGrade,
     setPageCardsCount,
     setIsCardsModalActive,
-    setNewCardName
+    setNewQuestion,
+    setNewAnswer
 } = slice.actions
 
 
@@ -94,4 +99,19 @@ export const getCardsTC = (id: string, pageCardsCount: number) => (dispatch: Dis
         .catch((error) => console.log(error))
 }
 
+export const postNewCardTC = (packId: string, question: string, answer: string) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: "loading"}))
+    cardsAPI.postNewCard(packId, question, answer)
+        .then(response => {
+            console.log(response)
+            dispatch(setStatus({status: "success"}))
+            dispatch(setNewQuestion({newQuestion: ""}))
+            dispatch(setNewAnswer({newAnswer: ""}))
+            dispatch(setIsCardsModalActive({isCardsModalActive: false}))
+        })
+        .catch((error) => {
+            console.log(error)
+            dispatch(setStatus({status: "failed"}))
+        })
 
+}

@@ -20,7 +20,8 @@ import {
     setPageCount
 } from "./packs-reducer";
 import TablePagination from "@mui/material/TablePagination";
-import {BasicModal} from "../Modal/Modal";
+import {PackModal} from "../Modal/PackModal";
+
 
 
 export const Packs = () => {
@@ -78,7 +79,7 @@ export const Packs = () => {
     }
 
     if (isModalActive) {
-        return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()} name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"} open={true}/>
+        return <PackModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()} name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"} open={true}/>
     } else {
         return (
             <div className={classes.packsWrp}>

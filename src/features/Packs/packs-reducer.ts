@@ -18,7 +18,8 @@ const initialState = {
     isEditModalActive: false,
     isPackChanged: false,
     inputPrivateValue: false,
-    isPackPrivate: false
+    isPackPrivate: false,
+    packId: ""
 }
 
 type packType = {
@@ -88,6 +89,9 @@ const slice = createSlice({
         setIsPackPrivate(state, action: PayloadAction<{ isPackPrivate: boolean }>) {
             return {...state, isPackPrivate: action.payload.isPackPrivate}
         },
+        setCardsPackId(state, action: PayloadAction<{ packId: string }>) {
+            return {...state, packId: action.payload.packId}
+        },
 
     }
 })
@@ -109,7 +113,8 @@ export const {
     setIsPackChanged,
     setIsEditModalActive,
     setInputPrivateValue,
-    setIsPackPrivate
+    setIsPackPrivate,
+    setCardsPackId
 } = slice.actions
 
 

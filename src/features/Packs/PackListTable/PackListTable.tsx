@@ -9,10 +9,17 @@ import TableRow from '@mui/material/TableRow';
 import classes from "../Packs.module.css"
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import {deletePackTC, editPackTC, setIsEditModalActive, setIsModalActive, setNewPackName} from "../packs-reducer";
+import {
+    deletePackTC,
+    editPackTC,
+    setCardsPackId,
+    setIsEditModalActive,
+    setIsModalActive,
+    setNewPackName
+} from "../packs-reducer";
 import {getCardsTC} from "../../Cards/cards-reducer";
 import {Navigate} from "react-router-dom";
-import {BasicModal} from "../../Modal/Modal";
+import {PackModal} from "../../Modal/PackModal";
 
 
 interface Column {
@@ -96,6 +103,7 @@ export const PackListTable = React.memo((() => {
     const onClickPackHandle = (e: any, id: string) => {
         // @ts-ignore
         dispatch(getCardsTC(id, pageCardsCount))
+        dispatch(setCardsPackId({packId: id}))
     }
     const onClickEditPackHandler = () => {
         // @ts-ignore
@@ -113,7 +121,7 @@ export const PackListTable = React.memo((() => {
         isEditModalActive ? dispatch(setIsEditModalActive({isEditModalActive: false})) : dispatch(setIsEditModalActive({isEditModalActive: true}))
     }
     if (isEditModalActive) {
-        return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} name={"Edit Pack"} placeholderName={"Enter New Pack Name"} btnName={"Save"} open={true}/>
+        return <PackModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} name={"Edit Pack"} placeholderName={"Enter New Pack Name"} btnName={"Save"} open={true}/>
     } else {
         return (
             <Paper sx={{width: '100%', overflow: 'hidden'}}>
@@ -148,13 +156,13 @@ export const PackListTable = React.memo((() => {
                                                 } else {
                                                     return <TableCell>
                                                         {value[2] && <button key={column.id}
-                                                                onClick={() => deleteButtonHandler(row.id)}
+                                                                onClick={(e) => onClickPackHandle(e, row.id)}
                                                                 className={classes.actionsBtn}>{value[2]}</button>}
                                                         {value[1] && <button key={column.id}
                                                                 onClick={() => editButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[1]}</button>}
                                                         {value[0] && <button key={column.id}
-                                                                onClick={(e) => onClickPackHandle(e, row.id)}
+                                                                onClick={() => deleteButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[0]}</button>}
                                                     </TableCell>
                                                 }

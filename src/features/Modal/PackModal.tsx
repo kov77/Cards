@@ -13,8 +13,6 @@ import {
     setNewPackName
 } from '../Packs/packs-reducer';
 import Button from '@mui/material/Button';
-import {useState} from "react";
-
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -28,7 +26,7 @@ const style = {
     p: 4,
 };
 
-export function BasicModal(props: any) {
+export function PackModal(props: any) {
     const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
     const inputPrivateValue = useSelector((state: AppStateType) => state.packs.inputPrivateValue)
 

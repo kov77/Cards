@@ -10,8 +10,8 @@ import {AppStateType} from "../../app/store";
 import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {setIsCardsModalActive, setNewCardName} from "./cards-reducer";
-import {BasicModal} from "../Modal/Modal";
+import {postNewCardTC, setIsCardsModalActive} from "./cards-reducer";
+import {CardModal} from "../Modal/CardModal";
 
 
 export const Cards = () => {
@@ -20,6 +20,9 @@ export const Cards = () => {
     const cardMaxGrade = useSelector((state: AppStateType) => state.cards.maxGrade)
     const isRedirect = useSelector((state: AppStateType) => state.packs.isRedirect)
     const isCardsModalActive = useSelector((state: AppStateType) => state.cards.isCardsModalActive)
+    const packId = useSelector((state: AppStateType) => state.packs.packId)
+    const newQuestion = useSelector((state: AppStateType) => state.cards.newQuestion)
+    const newAnswer = useSelector((state: AppStateType) => state.cards.newAnswer)
 
     const dispatch = useDispatch()
 
@@ -38,11 +41,8 @@ export const Cards = () => {
         dispatch(redirectToCards({isRedirect: false}))
     }
     const onClickAddCardHandler = () => {
-        console.log("I'm Cool Card")
         // @ts-ignore
-        dispatch(addNewCardTC(newCardName, inputPrivateValue))
-        dispatch(setNewCardName({newCardName: ""}))
-        dispatch(setIsCardsModalActive({isCardsModalActive: false}))
+        dispatch(postNewCardTC(packId, newQuestion, newAnswer))
     }
 
     const addNewCardButtonHandler = () => {
@@ -50,7 +50,7 @@ export const Cards = () => {
     }
 
     if (isCardsModalActive) {
-        return <BasicModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
+        return <CardModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
                            name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
                            open={true}/>
     } else {
