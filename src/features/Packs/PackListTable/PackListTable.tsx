@@ -93,7 +93,7 @@ export const PackListTable = React.memo((() => {
     let rows: any = []
 
     cardPacks.forEach((pack: any) => {
-        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, (pack.private ? ["delete", "edit", "learn"] :  ["learn"])))
+        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, (pack.user_id === userId ? ["delete", "edit", "learn"] :  ["learn"])))
     })
 
     if (isRedirect) {
