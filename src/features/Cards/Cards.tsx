@@ -10,7 +10,7 @@ import {AppStateType} from "../../app/store";
 import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {postNewCardTC, setIsCardsModalActive} from "./cards-reducer";
+import {postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion} from "./cards-reducer";
 import {CardModal} from "../Modal/CardModal";
 
 
@@ -43,6 +43,9 @@ export const Cards = () => {
     const onClickAddCardHandler = () => {
         // @ts-ignore
         dispatch(postNewCardTC(packId, newQuestion, newAnswer))
+        dispatch(setNewQuestion({newQuestion: ""}))
+        dispatch(setNewAnswer({newAnswer: ""}))
+        dispatch(setIsCardsModalActive({isCardsModalActive: false}))
     }
 
     const addNewCardButtonHandler = () => {

@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {
     addNewPackTC,
-    setInputPrivateValue,
+    setIsPackPrivate,
     setIsEditModalActive,
     setIsModalActive,
     setNewPackName
@@ -28,7 +28,7 @@ const style = {
 
 export function PackModal(props: any) {
     const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
-    const inputPrivateValue = useSelector((state: AppStateType) => state.packs.inputPrivateValue)
+    const isPackPrivate = useSelector((state: AppStateType) => state.packs.isPackPrivate)
 
     const dispatch = useDispatch()
 
@@ -42,7 +42,7 @@ export function PackModal(props: any) {
     }
 
     const onChangeInputPrivateHandler = (e:any) => {
-        dispatch(setInputPrivateValue({inputPrivateValue: e.currentTarget.isChecked}))
+        dispatch(setIsPackPrivate({isPackPrivate: e.target.checked}))
     }
 
     return (
@@ -56,7 +56,7 @@ export function PackModal(props: any) {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         {props.name}
                     </Typography>
-                    <input type="checkbox" checked={inputPrivateValue} onChange={onChangeInputPrivateHandler}/>
+                    <input type="checkbox" checked={isPackPrivate} onChange={onChangeInputPrivateHandler}/>
                     <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName} placeholder={props.placeholderName}/>
                     <Button onClick={props.onClickBtnHandler} variant="contained">{props.btnName}</Button>
                     <button onClick={onClickModalCloseHandler}>X</button>

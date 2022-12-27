@@ -17,7 +17,6 @@ const initialState = {
     isModalActive: false,
     isEditModalActive: false,
     isPackChanged: false,
-    inputPrivateValue: false,
     isPackPrivate: false,
     packId: ""
 }
@@ -83,9 +82,6 @@ const slice = createSlice({
         setIsPackChanged(state, action: PayloadAction<{ isPackChanged: boolean }>) {
             return {...state, isPackChanged: action.payload.isPackChanged}
         },
-        setInputPrivateValue(state, action: PayloadAction<{ inputPrivateValue: boolean }>) {
-            return {...state, inputPrivateValue: action.payload.inputPrivateValue}
-        },
         setIsPackPrivate(state, action: PayloadAction<{ isPackPrivate: boolean }>) {
             return {...state, isPackPrivate: action.payload.isPackPrivate}
         },
@@ -112,7 +108,6 @@ export const {
     setIsModalActive,
     setIsPackChanged,
     setIsEditModalActive,
-    setInputPrivateValue,
     setIsPackPrivate,
     setCardsPackId
 } = slice.actions

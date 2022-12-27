@@ -105,9 +105,7 @@ export const postNewCardTC = (packId: string, question: string, answer: string) 
         .then(response => {
             console.log(response)
             dispatch(setStatus({status: "success"}))
-            dispatch(setNewQuestion({newQuestion: ""}))
-            dispatch(setNewAnswer({newAnswer: ""}))
-            dispatch(setIsCardsModalActive({isCardsModalActive: false}))
+
         })
         .catch((error) => {
             console.log(error)

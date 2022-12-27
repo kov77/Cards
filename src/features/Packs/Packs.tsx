@@ -29,7 +29,7 @@ export const Packs = () => {
     const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
     const isModalActive = useSelector((state: AppStateType) => state.packs.isModalActive)
     const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
-    const inputPrivateValue = useSelector((state: AppStateType) => state.packs.inputPrivateValue)
+    const isPackPrivate = useSelector((state: AppStateType) => state.packs.isPackPrivate)
 
 
     const dispatch = useDispatch()
@@ -73,7 +73,7 @@ export const Packs = () => {
 
     const onClickAddPackHandler = () => {
         // @ts-ignore
-        dispatch(addNewPackTC( newPackName, inputPrivateValue))
+        dispatch(addNewPackTC( newPackName, isPackPrivate))
         dispatch(setNewPackName({newPackName: ""}))
         dispatch(setIsModalActive({isModalActive: false}))
     }

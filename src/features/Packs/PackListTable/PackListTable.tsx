@@ -154,6 +154,7 @@ export const PackListTable = React.memo((() => {
                                                                       key={column.id}
                                                                       align={column.align}>{value}</TableCell>
                                                 } else {
+                                                    console.log(value)
                                                     return <TableCell>
                                                         {value[2] && <button key={column.id}
                                                                 onClick={(e) => onClickPackHandle(e, row.id)}
