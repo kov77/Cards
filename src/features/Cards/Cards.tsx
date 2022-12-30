@@ -10,7 +10,7 @@ import {AppStateType} from "../../app/store";
 import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion} from "./cards-reducer";
+import {getCardsTC, postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion} from "./cards-reducer";
 import {CardModal} from "../Modal/CardModal";
 
 
@@ -23,6 +23,8 @@ export const Cards = () => {
     const packId = useSelector((state: AppStateType) => state.packs.packId)
     const newQuestion = useSelector((state: AppStateType) => state.cards.newQuestion)
     const newAnswer = useSelector((state: AppStateType) => state.cards.newAnswer)
+    const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
+
 
     const dispatch = useDispatch()
 
@@ -46,19 +48,22 @@ export const Cards = () => {
         dispatch(setNewQuestion({newQuestion: ""}))
         dispatch(setNewAnswer({newAnswer: ""}))
         dispatch(setIsCardsModalActive({isCardsModalActive: false}))
+        // @ts-ignore
+        dispatch(getCardsTC(packId, pageCardsCount))
+
     }
 
     const addNewCardButtonHandler = () => {
         isCardsModalActive ? dispatch(setIsCardsModalActive({isCardsModalActive: false})) : dispatch(setIsCardsModalActive({isCardsModalActive: true}))
     }
 
-    if (isCardsModalActive) {
-        return <CardModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
-                           name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
-                           open={true}/>
-    } else {
-        return (
+
+    return (
             <div className={classes.packsWrp}>
+                {isCardsModalActive &&
+                    <CardModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
+                               name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
+                               open={true}/>}
                 <button onClick={backBtnHandler}>Back</button>
                 <div className={classes.packsList}>
                     <div className={classes.packsListAdd}>
@@ -72,6 +77,6 @@ export const Cards = () => {
                     <CardListTable cardPacks={cardPacks} cardsTotalCount={cardsTotalCount} cardMaxGrade={cardMaxGrade}/>
                 </div>
             </div>
-        )
-    }
+    )
+
 }

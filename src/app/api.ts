@@ -113,6 +113,9 @@ export const cardsAPI = {
     postNewCard(packId: string, question: string, answer: string) {
         return instance.post('/cards/card', {card: {cardsPack_id:packId, question:question, answer:answer}})
     },
+    putGrade(cardId: string, grade: number) {
+        return instance.put('/cards/card', {card: {_id: cardId, grade: grade}})
+    }
 }
 
 

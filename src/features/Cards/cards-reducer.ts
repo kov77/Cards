@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {Dispatch} from "redux";
 import {cardsAPI} from "../../app/api";
-import {redirectToCards} from "../Packs/packs-reducer";
+import {redirectToCards, setIsPackChanged} from "../Packs/packs-reducer";
 import {setStatus} from "../../app/app-reducer";
 
 const initialState = {
@@ -14,7 +14,8 @@ const initialState = {
     minGrade: 0,
     isCardsModalActive: false,
     newQuestion: "",
-    newAnswer: ""
+    newAnswer: "",
+    grade: 0,
 }
 
  export type cardType = {
@@ -66,6 +67,9 @@ const slice = createSlice({
         },
         setNewAnswer(state, action: any) {
             return {...state, newAnswer: action.payload.newAnswer}
+        },
+        setGrade(state, action: any) {
+            return{...state, grade: action.payload.grade}
         }
     }
 })
@@ -80,7 +84,8 @@ export const {
     setPageCardsCount,
     setIsCardsModalActive,
     setNewQuestion,
-    setNewAnswer
+    setNewAnswer,
+    setGrade,
 } = slice.actions
 
 
@@ -103,13 +108,24 @@ export const postNewCardTC = (packId: string, question: string, answer: string) 
     dispatch(setStatus({status: "loading"}))
     cardsAPI.postNewCard(packId, question, answer)
         .then(response => {
-            console.log(response)
             dispatch(setStatus({status: "success"}))
-
         })
         .catch((error) => {
             console.log(error)
             dispatch(setStatus({status: "failed"}))
         })
+}
 
+export const setGradeTC = (cardId: string, grade: number) => (dispatch: Dispatch) => {
+    dispatch(setStatus({status: "loading"}))
+    cardsAPI.putGrade(cardId, grade)
+        .then(response => {
+            console.log(response)
+            dispatch(setGrade({grade: response.data.updatedCard.grade}))
+            dispatch(setStatus({status: "success"}))
+        })
+        .catch((error) => {
+            console.log(error)
+            dispatch(setStatus({status: "failed"}))
+        })
 }

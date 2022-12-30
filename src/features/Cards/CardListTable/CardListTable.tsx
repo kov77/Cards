@@ -9,8 +9,10 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {useDispatch, useSelector} from "react-redux";
 import Rating from '@mui/material/Rating';
-import { setCurrentPage, setPageCount } from '../../Packs/packs-reducer';
-import {cardType, setPageCardsCount} from "../cards-reducer";
+import {setCurrentPage, setPageCount} from '../../Packs/packs-reducer';
+import {cardType, setGrade, setGradeTC, setPageCardsCount} from "../cards-reducer";
+import {AppStateType} from "../../../app/store";
+import {useEffect, useState} from "react";
 
 interface Column {
     id: string;
@@ -21,8 +23,8 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-    { id: 'question', label: 'Question', minWidth: 170 },
-    { id: 'answer', label: 'Answer', minWidth: 100 },
+    {id: 'question', label: 'Question', minWidth: 170},
+    {id: 'answer', label: 'Answer', minWidth: 100},
     {
         id: 'last_updated',
         label: 'Last Updated',
@@ -53,32 +55,35 @@ function createData(
     last_updated: string,
     grade: number
 ): Data {
-    return { id, question, answer, last_updated, grade };
+    return {id, question, answer, last_updated, grade};
 }
 
 
-
-
 export function CardListTable(props: any) {
+    const grade = useSelector((state: AppStateType) => state.cards.grade)
+
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [ratingValue, setValue] = React.useState<number | null>(2);
+    const [localGrade, setLocalGrade] = useState(0)
+
 
     const dispatch = useDispatch()
 
     const pageFromLocalStorage = localStorage.getItem('currentPage')
 
+
+    const onChangeGradeHandler = (e: any, cardId: string) => {
+        dispatch(setGrade({grade: localGrade}))
+        // @ts-ignore
+        dispatch(setGradeTC(cardId, localGrade))
+        setLocalGrade(+e.currentTarget.value)
+    }
+
     let rows: any = []
     props.cardPacks.forEach((card: cardType) => {
-        rows.push(createData(card._id, card.answer,  card.question, card.updated.split('T')[0],  props.cardMaxGrade))
+        rows.push(createData(card._id, card.question, card.answer, card.updated.split('T')[0], grade))
     })
 
-
-    // const handleChangePage = (event: unknown, newPage: number) => {
-    //     localStorage.setItem('currentPage', JSON.stringify(newPage))
-    //     dispatch(setCurrentPage({page: newPage}))
-    //     setPage(newPage);
-    // };
     const handleChangePage = (event: unknown, newPage: number) => {
         dispatch(setCurrentPage({page: newPage}))
     };
@@ -89,13 +94,9 @@ export function CardListTable(props: any) {
         setPage(0);
     };
 
-    // if(pageFromLocalStorage !== "" && pageFromLocalStorage !== null) {
-    //     setPage(+JSON.parse(pageFromLocalStorage))
-    // }
-
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+        <Paper sx={{width: '100%', overflow: 'hidden'}}>
+            <TableContainer sx={{maxHeight: 440}}>
                 <Table stickyHeader aria-label="sticky table">
                     <TableHead>
                         <TableRow>
@@ -103,7 +104,7 @@ export function CardListTable(props: any) {
                                 <TableCell
                                     key={column.id}
                                     align={column.align}
-                                    style={{ minWidth: column.minWidth }}
+                                    style={{minWidth: column.minWidth}}
                                 >
                                     {column.label}
                                 </TableCell>
@@ -116,23 +117,20 @@ export function CardListTable(props: any) {
                             .map((row: any) => {
                                 return (
                                     <TableRow key={row.id} hover tabIndex={-1}>
-                                        {columns.map((column) => {
+                                        {columns.map((column, index) => {
                                             const value = row[column.id];
-                                            if((typeof value) === "string") {
-                                                return <TableCell key={column.id} align={column.align}>{value}</TableCell>
+                                            if ((typeof value) === "string") {
+                                                return <TableCell key={index} align={column.align}>{value}</TableCell>
                                             } else {
                                                 return <TableCell>
                                                     <Rating
                                                         name="simple-controlled"
-                                                        value={ratingValue}
-                                                        onChange={(event, newValue) => {
-                                                            setValue(newValue);
-                                                        }}
+                                                        value={row.grade}
+                                                        onChange={(e: any) => onChangeGradeHandler(e, row.id)}
                                                         style={{"display": "flex", "justifyContent": "center"}}
                                                     />
                                                 </TableCell>
                                             }
-
                                         })}
                                     </TableRow>
                                 );

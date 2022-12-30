@@ -257,6 +257,7 @@ export const editPackTC = (packId: string, newName: string) => (dispatch: Dispat
         .then(response => {
             dispatch(setStatus({status: 'success'}))
             dispatch(setIsPackChanged({isPackChanged: true}))
+            dispatch(setIsEditModalActive({isEditModalActive: false}))
         })
         .catch(error => {
             dispatch(setStatus({status: 'failed'}))

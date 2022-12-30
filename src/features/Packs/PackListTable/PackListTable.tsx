@@ -11,15 +11,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
 import {
     deletePackTC,
-    editPackTC,
     setCardsPackId,
     setIsEditModalActive,
-    setIsModalActive,
-    setNewPackName
+
 } from "../packs-reducer";
 import {getCardsTC} from "../../Cards/cards-reducer";
 import {Navigate} from "react-router-dom";
-import {PackModal} from "../../Modal/PackModal";
+import { EditModal } from '../../Modal/EditModal';
 
 
 interface Column {
@@ -87,7 +85,6 @@ export const PackListTable = React.memo((() => {
     const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
     const userId = useSelector((state: AppStateType) => state.app.userId)
     const isEditModalActive = useSelector((state: AppStateType) => state.packs.isEditModalActive)
-    const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
 
 
     let rows: any = []
@@ -114,17 +111,13 @@ export const PackListTable = React.memo((() => {
         // @ts-ignore
         dispatch(deletePackTC(id))
     }
-    const editButtonHandler = (packId: string) => {
-        // @ts-ignore
-        dispatch(editPackTC(packId, newPackName))
-        dispatch(setNewPackName({newPackName: ""}))
+    const editButtonHandler = (id: string) => {
         isEditModalActive ? dispatch(setIsEditModalActive({isEditModalActive: false})) : dispatch(setIsEditModalActive({isEditModalActive: true}))
+        dispatch(setCardsPackId({packId: id}))
     }
-    if (isEditModalActive) {
-        return <PackModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} name={"Edit Pack"} placeholderName={"Enter New Pack Name"} btnName={"Save"} open={true}/>
-    } else {
         return (
             <Paper sx={{width: '100%', overflow: 'hidden'}}>
+                {isEditModalActive && <EditModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} />}
                 <TableContainer sx={{maxHeight: 440}}>
                     <Table stickyHeader aria-label="sticky table">
                         <TableHead>
@@ -147,22 +140,20 @@ export const PackListTable = React.memo((() => {
                                     return (
                                         <TableRow key={row.id} hover tabIndex={-1}>
                                             {columns.map((column) => {
-
                                                 const value = row[column.id];
                                                 if ((typeof value) !== "object") {
                                                     return <TableCell onClick={(e) => onClickPackHandle(e, row.id)}
                                                                       key={column.id}
                                                                       align={column.align}>{value}</TableCell>
                                                 } else {
-                                                    console.log(value)
-                                                    return <TableCell>
-                                                        {value[2] && <button key={column.id}
+                                                    return <TableCell  key={column.id}>
+                                                        {value[2] && <button
                                                                 onClick={(e) => onClickPackHandle(e, row.id)}
                                                                 className={classes.actionsBtn}>{value[2]}</button>}
-                                                        {value[1] && <button key={column.id}
+                                                        {value[1] && <button
                                                                 onClick={() => editButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[1]}</button>}
-                                                        {value[0] && <button key={column.id}
+                                                        {value[0] && <button
                                                                 onClick={() => deleteButtonHandler(row.id)}
                                                                 className={classes.actionsBtn}>{value[0]}</button>}
                                                     </TableCell>
@@ -177,5 +168,4 @@ export const PackListTable = React.memo((() => {
                 </TableContainer>
             </Paper>
         );
-    }
 }))

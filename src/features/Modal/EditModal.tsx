@@ -10,7 +10,7 @@ import {
     setIsPackPrivate,
     setIsEditModalActive,
     setIsModalActive,
-    setNewPackName
+    setNewPackName, editPackTC
 } from '../Packs/packs-reducer';
 import Button from '@mui/material/Button';
 
@@ -26,9 +26,9 @@ const style = {
     p: 4,
 };
 
-export function PackModal(props: any) {
+export function EditModal(props: any) {
     const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
-    const isPackPrivate = useSelector((state: AppStateType) => state.packs.isPackPrivate)
+    const packId = useSelector((state: AppStateType) => state.packs.packId)
 
     const dispatch = useDispatch()
 
@@ -36,29 +36,34 @@ export function PackModal(props: any) {
         dispatch(setNewPackName({newPackName: e.currentTarget.value}))
     }
 
+    const saveBtnHandler = () => {
+        // @ts-ignore
+        dispatch(editPackTC(packId, newPackName))
+        dispatch(setNewPackName({newPackName: ""}))
+    }
+
+
     const onClickModalCloseHandler = () => {
         dispatch(setIsModalActive({isModalActive: false}))
         dispatch(setIsEditModalActive({isEditModalActive: false}))
-    }
+        dispatch(setNewPackName({newPackName: ""}))
 
-    const onChangeInputPrivateHandler = (e:any) => {
-        dispatch(setIsPackPrivate({isPackPrivate: e.target.checked}))
     }
 
     return (
         <div>
             <Modal
-                open={props.open}
+                open={true}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {props.name}
+                        {"Edit Pack"}
                     </Typography>
-                    <input type="checkbox" checked={isPackPrivate} onChange={onChangeInputPrivateHandler}/>
-                    <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName} placeholder={props.placeholderName}/>
-                    <Button onClick={props.onClickBtnHandler} variant="contained">{props.btnName}</Button>
+                    <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName}
+                                   placeholder={"Enter New Pack Name"}/>
+                    <Button onClick={saveBtnHandler} variant="contained">{"Save"}</Button>
                     <button onClick={onClickModalCloseHandler}>X</button>
                 </Box>
             </Modal>
