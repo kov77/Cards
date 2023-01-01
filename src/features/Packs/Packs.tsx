@@ -32,6 +32,7 @@ export const Packs = () => {
     const isPackPrivate = useSelector((state: AppStateType) => state.packs.isPackPrivate)
 
 
+
     const dispatch = useDispatch()
 
     const [page, setPage] = useState(0);

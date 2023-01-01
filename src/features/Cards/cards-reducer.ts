@@ -15,7 +15,6 @@ const initialState = {
     isCardsModalActive: false,
     newQuestion: "",
     newAnswer: "",
-    grade: 0,
 }
 
  export type cardType = {
@@ -68,9 +67,8 @@ const slice = createSlice({
         setNewAnswer(state, action: any) {
             return {...state, newAnswer: action.payload.newAnswer}
         },
-        setGrade(state, action: any) {
-            return{...state, grade: action.payload.grade}
-        }
+
+
     }
 })
 
@@ -85,14 +83,14 @@ export const {
     setIsCardsModalActive,
     setNewQuestion,
     setNewAnswer,
-    setGrade,
+
 } = slice.actions
 
 
 // Thunks
-export const getCardsTC = (id: string, pageCardsCount: number) => (dispatch: Dispatch) => {
+export const getCardsTC = (packId: string, pageCardsCount: number) => (dispatch: Dispatch) => {
     dispatch(setStatus({status: "loading"}))
-    cardsAPI.getCards(id, pageCardsCount)
+    cardsAPI.getCards(packId, pageCardsCount)
         .then(response => {
             dispatch(getCardsData({cardPacks: response.data.cards}))
             dispatch(getCardsTotalCount({cardsTotalCount: response.data.cardsTotalCount}))
@@ -116,13 +114,18 @@ export const postNewCardTC = (packId: string, question: string, answer: string) 
         })
 }
 
-export const setGradeTC = (cardId: string, grade: number) => (dispatch: Dispatch) => {
+export const setGradeTC = (cardId: string, grade: number, packId: string, pageCardsCount: number) => (dispatch: Dispatch) => {
     dispatch(setStatus({status: "loading"}))
     cardsAPI.putGrade(cardId, grade)
         .then(response => {
-            console.log(response)
-            dispatch(setGrade({grade: response.data.updatedCard.grade}))
-            dispatch(setStatus({status: "success"}))
+            cardsAPI.getCards(packId, pageCardsCount)
+                .then(response => {
+                    dispatch(getCardsData({cardPacks: response.data.cards}))
+                    dispatch(getCardsTotalCount({cardsTotalCount: response.data.cardsTotalCount}))
+                    dispatch(getMaxGrade({maxGrade: response.data.maxGrade}))
+                    dispatch(getMinGrade({minGrade: response.data.minGrade}))
+                    dispatch(setStatus({status: "success"}))
+                })
         })
         .catch((error) => {
             console.log(error)

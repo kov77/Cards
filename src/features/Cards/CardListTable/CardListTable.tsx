@@ -10,9 +10,8 @@ import TableRow from '@mui/material/TableRow';
 import {useDispatch, useSelector} from "react-redux";
 import Rating from '@mui/material/Rating';
 import {setCurrentPage, setPageCount} from '../../Packs/packs-reducer';
-import {cardType, setGrade, setGradeTC, setPageCardsCount} from "../cards-reducer";
+import {cardType, setGradeTC, setPageCardsCount} from "../cards-reducer";
 import {AppStateType} from "../../../app/store";
-import {useEffect, useState} from "react";
 
 interface Column {
     id: string;
@@ -60,28 +59,26 @@ function createData(
 
 
 export function CardListTable(props: any) {
-    const grade = useSelector((state: AppStateType) => state.cards.grade)
+    const pageCardsCount = useSelector((state: AppStateType) => state.cards.pageCardsCount)
+    const packId = useSelector((state: AppStateType) => state.packs.packId)
 
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [localGrade, setLocalGrade] = useState(0)
 
 
     const dispatch = useDispatch()
 
     const pageFromLocalStorage = localStorage.getItem('currentPage')
 
-
     const onChangeGradeHandler = (e: any, cardId: string) => {
-        dispatch(setGrade({grade: localGrade}))
         // @ts-ignore
-        dispatch(setGradeTC(cardId, localGrade))
-        setLocalGrade(+e.currentTarget.value)
+        dispatch(setGradeTC(cardId, +e.currentTarget.value, packId, pageCardsCount))
     }
 
     let rows: any = []
     props.cardPacks.forEach((card: cardType) => {
-        rows.push(createData(card._id, card.question, card.answer, card.updated.split('T')[0], grade))
+
+        rows.push(createData(card._id, card.question, card.answer, card.updated.split('T')[0], card.grade))
     })
 
     const handleChangePage = (event: unknown, newPage: number) => {
