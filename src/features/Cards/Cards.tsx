@@ -7,10 +7,10 @@ import TextField from "@mui/material/TextField";
 import {useEffect, useState} from "react";
 import {useDebounce} from "usehooks-ts";
 import {AppStateType} from "../../app/store";
-import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName} from "../Packs/packs-reducer";
+import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName, setPackName} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {getCardsTC, postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion} from "./cards-reducer";
+import {getCardsTC, postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion, setSearchText} from "./cards-reducer";
 import {CardModal} from "../Modal/CardModal";
 
 
@@ -34,6 +34,10 @@ export const Cards = () => {
     const ohChangeInputHandler = (e: any) => {
         setValue(e.currentTarget.value)
     }
+
+    useEffect(() => {
+        dispatch(setSearchText({packName: value}))
+    }, [debouncedValue])
 
     if (!isRedirect) {
         return <Navigate to="/"/>

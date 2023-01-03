@@ -15,6 +15,7 @@ const initialState = {
     isCardsModalActive: false,
     newQuestion: "",
     newAnswer: "",
+    searchText: "",
 }
 
  export type cardType = {
@@ -67,6 +68,9 @@ const slice = createSlice({
         setNewAnswer(state, action: any) {
             return {...state, newAnswer: action.payload.newAnswer}
         },
+        setSearchText(state, action: any) {
+            return {...state, searchText: action.payload.searchText}
+        },
 
 
     }
@@ -83,6 +87,7 @@ export const {
     setIsCardsModalActive,
     setNewQuestion,
     setNewAnswer,
+    setSearchText,
 
 } = slice.actions
 

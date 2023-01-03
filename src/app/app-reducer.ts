@@ -32,7 +32,6 @@ export const {setStatus, getUserId} = slice.actions
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     userApi.getUserData()
         .then(response => {
-            console.log("get user data")
             dispatch(getUserId({userId: response.data._id}))
             dispatch(setIsLoggedIn({isLoggedIn: true}))
         })

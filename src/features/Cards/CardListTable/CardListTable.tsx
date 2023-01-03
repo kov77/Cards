@@ -9,7 +9,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import {useDispatch, useSelector} from "react-redux";
 import Rating from '@mui/material/Rating';
-import {setCurrentPage, setPageCount} from '../../Packs/packs-reducer';
+import {setCurrentPage} from '../../Packs/packs-reducer';
 import {cardType, setGradeTC, setPageCardsCount} from "../cards-reducer";
 import {AppStateType} from "../../../app/store";
 
