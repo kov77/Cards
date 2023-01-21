@@ -17,7 +17,8 @@ import {
 } from "../packs-reducer";
 import {getCardsTC} from "../../Cards/cards-reducer";
 import {Navigate} from "react-router-dom";
-import { EditModal } from '../../Modal/EditModal';
+import {EditModal} from '../../Modal/EditModal';
+import Button from '@mui/material/Button';
 
 
 interface Column {
@@ -90,7 +91,7 @@ export const PackListTable = React.memo((() => {
     let rows: any = []
 
     cardPacks.forEach((pack: any) => {
-        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, (pack.user_id === userId ? ["delete", "edit", "learn"] :  ["learn"])))
+        rows.push(createData(pack._id, pack.name, pack.cardsCount, pack.updated.split('T')[0], pack.user_name, (pack.user_id === userId ? ["learn", "edit", "delete"] : ["learn"])))
     })
 
     if (isRedirect) {
@@ -115,57 +116,67 @@ export const PackListTable = React.memo((() => {
         isEditModalActive ? dispatch(setIsEditModalActive({isEditModalActive: false})) : dispatch(setIsEditModalActive({isEditModalActive: true}))
         dispatch(setCardsPackId({packId: id}))
     }
-        return (
-            <Paper sx={{width: '100%', overflow: 'hidden'}}>
-                {isEditModalActive && <EditModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler} />}
-                <TableContainer sx={{maxHeight: 440}}>
-                    <Table stickyHeader aria-label="sticky table">
-                        <TableHead>
-                            <TableRow>
-                                {columns.map((column) => (
-                                    <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{minWidth: column.minWidth}}
-                                    >
-                                        {column.label}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rows
-                                // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row: any) => {
-                                    return (
-                                        <TableRow key={row.id} hover tabIndex={-1}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                if ((typeof value) !== "object") {
-                                                    return <TableCell onClick={(e) => onClickPackHandle(e, row.id)}
-                                                                      key={column.id}
-                                                                      align={column.align}>{value}</TableCell>
-                                                } else {
-                                                    return <TableCell  key={column.id}>
-                                                        {value[2] && <button
-                                                                onClick={(e) => onClickPackHandle(e, row.id)}
-                                                                className={classes.actionsBtn}>{value[2]}</button>}
-                                                        {value[1] && <button
-                                                                onClick={() => editButtonHandler(row.id)}
-                                                                className={classes.actionsBtn}>{value[1]}</button>}
-                                                        {value[0] && <button
-                                                                onClick={() => deleteButtonHandler(row.id)}
-                                                                className={classes.actionsBtn}>{value[0]}</button>}
-                                                    </TableCell>
-                                                }
+    return (
+        <Paper sx={{width: '100%', overflow: 'hidden'}}>
+            {isEditModalActive &&
+                <EditModal style={{"position": "absolute"}} onClickBtnHandler={onClickEditPackHandler}/>}
+            <TableContainer sx={{maxHeight: 440}}>
+                <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                        <TableRow>
+                            {columns.map((column) => (
+                                <TableCell
+                                    key={column.id}
+                                    align={column.align}
+                                    style={{minWidth: column.minWidth}}
+                                >
+                                    {column.label}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {rows
+                            // .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((row: any) => {
+                                return (
+                                    <TableRow key={row.id} hover tabIndex={-1}>
+                                        {columns.map((column) => {
+                                            const value = row[column.id];
+                                            if ((typeof value) !== "object") {
+                                                return <TableCell onClick={(e) => onClickPackHandle(e, row.id)}
+                                                                  key={column.id}
+                                                                  align={column.align}>{value}</TableCell>
+                                            } else {
+                                                return <TableCell key={column.id}>
+                                                    {value[0] && <Button
+                                                        variant="outlined"
+                                                        size="small"
+                                                        onClick={(e) => onClickPackHandle(e, row.id)}
+                                                        className={classes.actionsBtn}>{value[0]}</Button>}
+                                                    {value[1] && <Button
+                                                        style={{marginLeft: "10px"}}
+                                                        variant="outlined"
+                                                        size="small"
+                                                        onClick={() => editButtonHandler(row.id)}
+                                                        className={classes.actionsBtn}>{value[1]}</Button>}
+                                                    {value[2] && <Button
+                                                        style={{marginLeft: "10px"}}
+                                                        variant="outlined"
+                                                        color="error"
+                                                        size="small"
+                                                        onClick={() => deleteButtonHandler(row.id)}
+                                                        className={classes.actionsBtn}>{value[2]}</Button>}
+                                                </TableCell>
+                                            }
 
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
-        );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
+    );
 }))

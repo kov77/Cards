@@ -4,7 +4,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import classes from './ControlledSwitches.module.css'
 import {useDispatch, useSelector} from "react-redux";
-import {fetchMyPacksTC, fetchMyRangedPacksTC, rangePacks, setMaxCardsCount, setMinCardsCount} from "../../../features/Packs/packs-reducer";
+import { fetchMyRangedPacksTC, rangePacks, setMaxCardsCount, setMinCardsCount} from "../../../features/Packs/packs-reducer";
 import {AppStateType} from "../../../app/store";
 import {useState} from "react";
 
@@ -43,7 +43,7 @@ const dispatch = useDispatch()
 
     return (
         <FormGroup>
-            <FormControlLabel className={classes.formControl} checked={checked} control={<Switch style={{"color": "#0020ff"}} onChange={handleChange} />} label="My" />
+            <FormControlLabel className={classes.formControl} checked={checked} control={<Switch size="small" style={{"color": "#0020ff"}} onChange={handleChange} />} label="My" />
         </FormGroup>
     );
 }

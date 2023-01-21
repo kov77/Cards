@@ -1,3 +1,8 @@
 .formControl::before {
     content: "All"
 }
+
+.formControl {
+    width: 55px;
+    margin-top: 10px;
+}

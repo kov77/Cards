@@ -7,11 +7,14 @@ import TextField from "@mui/material/TextField";
 import {useEffect, useState} from "react";
 import {useDebounce} from "usehooks-ts";
 import {AppStateType} from "../../app/store";
-import {addNewPackTC, redirectToCards, setIsModalActive, setNewPackName, setPackName} from "../Packs/packs-reducer";
+import {redirectToCards} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
 import {getCardsTC, postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion, setSearchText} from "./cards-reducer";
 import {CardModal} from "../Modal/CardModal";
+import Box from "@mui/material/Box";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 
 
 export const Cards = () => {
@@ -63,14 +66,15 @@ export const Cards = () => {
 
 
     return (
-            <div className={classes.packsWrp}>
+            <Box className={classes.packsWrp}>
                 {isCardsModalActive &&
-                    <CardModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
+                    <CardModal className={classes.addNewCardModal} style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
                                name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
                                open={true}/>}
-                <button onClick={backBtnHandler}>Back</button>
+
                 <div className={classes.packsList}>
                     <div className={classes.packsListAdd}>
+                        <button className={classes.backBtn} onClick={backBtnHandler}><ArrowBackIcon></ArrowBackIcon></button>
                         <TextField onChange={e => ohChangeInputHandler(e)} size={"small"}
                                    className={classes.searchInput} id="outlined-basic" label="Search"
                                    variant="outlined"/>
@@ -80,7 +84,7 @@ export const Cards = () => {
                     </div>
                     <CardListTable cardPacks={cardPacks} cardsTotalCount={cardsTotalCount} cardMaxGrade={cardMaxGrade}/>
                 </div>
-            </div>
+            </Box>
     )
 
 }

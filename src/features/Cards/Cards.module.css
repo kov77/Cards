@@ -1,47 +1,52 @@
 .packsWrp {
-    width: 80%;
+    width: 100%;
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
 }
-
 .packsSideBar {
     width: 20%;
     background: rgba(0, 224, 128, 0.4);
     color: black;
 }
 
-.rangeSlider {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .packsList {
-    width: 80%;
+    width: 100%;
     background-color: #fff;
-    padding: 30px 50px;
-}
-
-.packsListAdd{
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 30px;
-
-}
-
-.searchInput {
-    width: 80%;
-}
-
-.addNewPackBtn {
-    width: 15%;
-    height: 40px;
-    border-radius: 30px;
-    font-weight: bold;
-    background: rgb(2,0,36);
-    background: linear-gradient(300deg, rgba(2,0,36,1) 0%, rgba(11,11,152,1) 50%, rgba(0,212,255,1) 93%);
 }
 
 .actionsBtn {
     margin-left: 20px;
 }
+
+.backBtn {
+    height: 50px;
+    width: 50px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.backBtn:hover {
+    border: 1px solid grey;
+    border-radius: 50%;
+    color: white;
+    background-color: lightgray;
+}
+
+.packsListAdd {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.searchInput {
+    width: 50%;
+}
+
+.addNewCardModal {
+    background-color: #000;
+}
+
+

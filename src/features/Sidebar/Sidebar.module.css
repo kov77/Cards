@@ -1,9 +1,22 @@
 
-
 .sidebarWrp {
-    background: red;
     width: 10vw ;
     display: flex;
     flex-direction: column;
-    padding: 5px;
+}
+
+.linkItem {
+    background-color: white;
+    text-decoration: none;
+    border: lightgray 1px solid;
+    padding: 10px;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 20px;
+    color: grey;
+}
+
+.linkItem:hover {
+    background-color: grey;
+    color: white;
 }

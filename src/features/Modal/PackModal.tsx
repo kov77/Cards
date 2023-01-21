@@ -5,6 +5,7 @@ import Modal from '@mui/material/Modal';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
+import classes from "./modal.module.css"
 import {
     addNewPackTC,
     setIsPackPrivate,
@@ -41,7 +42,7 @@ export function PackModal(props: any) {
         dispatch(setIsEditModalActive({isEditModalActive: false}))
     }
 
-    const onChangeInputPrivateHandler = (e:any) => {
+    const onChangeInputPrivateHandler = (e: any) => {
         dispatch(setIsPackPrivate({isPackPrivate: e.target.checked}))
     }
 
@@ -53,13 +54,23 @@ export function PackModal(props: any) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {props.name}
-                    </Typography>
-                    <input type="checkbox" checked={isPackPrivate} onChange={onChangeInputPrivateHandler}/>
-                    <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName} placeholder={props.placeholderName}/>
-                    <Button onClick={props.onClickBtnHandler} variant="contained">{props.btnName}</Button>
-                    <button onClick={onClickModalCloseHandler}>X</button>
+                    <button className={classes.modalClose} onClick={onClickModalCloseHandler}>X</button>
+                    <div className={classes.modalWrp}>
+
+                        <Typography id="modal-modal-title" variant="h6" component="h2">
+                            {props.name}
+                        </Typography>
+                        <div className={classes.inputFieldWrp}>
+                            <div className={classes.privateCheckbox}>
+                                <input type="checkbox" id={"privateCheckbox"} checked={isPackPrivate}
+                                       onChange={onChangeInputPrivateHandler}/>
+                                <label htmlFor="privateCheckbox"> Hide</label>
+                            </div>
+                            <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"}
+                                           value={newPackName} placeholder={props.placeholderName}/>
+                        </div>
+                        <Button onClick={props.onClickBtnHandler} variant="contained">{props.btnName}</Button>
+                    </div>
                 </Box>
             </Modal>
         </div>

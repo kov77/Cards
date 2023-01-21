@@ -15,6 +15,7 @@ import {RecoveryModal} from "../features/Recovery/RecoveryModal";
 import {useDispatch} from "react-redux";
 import { initializeAppTC } from './app-reducer';
 import {Cards} from "../features/Cards/Cards";
+import Container from '@mui/material/Container';
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )
@@ -27,11 +28,12 @@ const App = () => {
 
     return (
         <BrowserRouter>
-            <div className="container">
+            {status === "loading" && <LinearProgress style={{"width": "100%"}} color="secondary"/>}
+            <div style={{display: "flex"}} className="container">
                 <Sidebar />
+
                 <div className="App">
-                    {status === "loading" && <LinearProgress style={{"width": "100%"}} color="secondary"/>}
-                    <Routes>
+                    <Routes >
                         <Route path={'/login'} element={<SignIn />} />
                         <Route path={'/profile'} element={<Profile />} />
                         <Route path={'/newpass/*'} element={<NewPassword />} />

@@ -23,14 +23,12 @@ import TablePagination from "@mui/material/TablePagination";
 import {PackModal} from "../Modal/PackModal";
 
 
-
 export const Packs = () => {
     const isLoggedIn = useSelector((state: AppStateType) => state.login.isLoggedIn)
     const cardPacksTotalCount = useSelector((state: AppStateType) => state.packs.cardPacksTotalCount)
     const isModalActive = useSelector((state: AppStateType) => state.packs.isModalActive)
     const newPackName = useSelector((state: AppStateType) => state.packs.newPackName)
     const isPackPrivate = useSelector((state: AppStateType) => state.packs.isPackPrivate)
-
 
 
     const dispatch = useDispatch()
@@ -40,7 +38,6 @@ export const Packs = () => {
 
     const [value, setValue] = useState<string>('')
     const debouncedValue = useDebounce<string>(value, 1000)
-
 
 
     const ohChangeInputHandler = (e: any) => {
@@ -74,36 +71,37 @@ export const Packs = () => {
 
     const onClickAddPackHandler = () => {
         // @ts-ignore
-        dispatch(addNewPackTC( newPackName, isPackPrivate))
+        dispatch(addNewPackTC(newPackName, isPackPrivate))
         dispatch(setNewPackName({newPackName: ""}))
         dispatch(setIsModalActive({isModalActive: false}))
     }
 
     if (isModalActive) {
-        return <PackModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()} name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"} open={true}/>
+        return <PackModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()}
+                          name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"}
+                          open={true}/>
     } else {
         return (
             <div className={classes.packsWrp}>
                 <div className={classes.packsSideBar}>
-                    <h5>Show packs cards</h5>
-                    <div style={{display: "flex", justifyContent: "center"}}>
-                        <ControlledSwitches/>
+                    <div className={classes.packsFilter}>
+                        <h5>PACKS FILTER</h5>
+                        <div style={{display: "flex", justifyContent: "center"}}>
+                            <ControlledSwitches  />
+                        </div>
                     </div>
+                    <TextField onChange={e => ohChangeInputHandler(e)} size={"small"}
+                               className={classes.searchInput} id="outlined-basic" label="Search"
+                               variant="outlined"/>
                     <div className={classes.rangeSlider}>
-                        <h5>Number of cards</h5>
+                        <h5>PACKS RANGER</h5>
                         <RangeSlider/>
                     </div>
+                    <Button variant="contained" className={classes.addNewPackBtn} onClick={addButtonHandler}>Add new
+                        Pack</Button>
                 </div>
 
                 <div className={classes.packsList}>
-                    <div className={classes.packsListAdd
-                    }>
-                        <TextField onChange={e => ohChangeInputHandler(e)} size={"small"}
-                                   className={classes.searchInput} id="outlined-basic" label="Search"
-                                   variant="outlined"/>
-                        <Button className={classes.addNewPackBtn} onClick={addButtonHandler} variant="contained">Add new
-                            Pack</Button>
-                    </div>
                     <PackListTable/>
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 100]}

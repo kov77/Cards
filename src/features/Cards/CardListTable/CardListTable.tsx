@@ -12,6 +12,7 @@ import Rating from '@mui/material/Rating';
 import {setCurrentPage} from '../../Packs/packs-reducer';
 import {cardType, setGradeTC, setPageCardsCount} from "../cards-reducer";
 import {AppStateType} from "../../../app/store";
+import classes from "./../Cards.module.css"
 
 interface Column {
     id: string;
