@@ -10,12 +10,17 @@ import {AppStateType} from "../../app/store";
 import {redirectToCards} from "../Packs/packs-reducer";
 import {Navigate} from "react-router-dom";
 import Button from "@mui/material/Button";
-import {getCardsTC, postNewCardTC, setIsCardsModalActive, setNewAnswer, setNewQuestion, setSearchText} from "./cards-reducer";
+import {
+    getCardsTC,
+    postNewCardTC,
+    setIsCardsModalActive,
+    setNewAnswer,
+    setNewQuestion,
+    setSearchText
+} from "./cards-reducer";
 import {CardModal} from "../Modal/CardModal";
 import Box from "@mui/material/Box";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
-
 
 export const Cards = () => {
     const cardPacks = useSelector((state: AppStateType) => state.cards.cardPacks)
@@ -64,17 +69,18 @@ export const Cards = () => {
         isCardsModalActive ? dispatch(setIsCardsModalActive({isCardsModalActive: false})) : dispatch(setIsCardsModalActive({isCardsModalActive: true}))
     }
 
-
-    return (
+    if (isCardsModalActive) {
+        return <CardModal className={classes.addNewCardModal} style={{"position": "absolute"}}
+                          onClickBtnHandler={() => onClickAddCardHandler()}
+                          name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
+                          open={true}/>
+    } else {
+        return (
             <Box className={classes.packsWrp}>
-                {isCardsModalActive &&
-                    <CardModal className={classes.addNewCardModal} style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddCardHandler()}
-                               name={"Add New Card"} btnName={"Add Card"} placeholderName={"Enter name of Card"}
-                               open={true}/>}
-
                 <div className={classes.packsList}>
                     <div className={classes.packsListAdd}>
-                        <button className={classes.backBtn} onClick={backBtnHandler}><ArrowBackIcon></ArrowBackIcon></button>
+                        <button className={classes.backBtn} onClick={backBtnHandler}><ArrowBackIcon></ArrowBackIcon>
+                        </button>
                         <TextField onChange={e => ohChangeInputHandler(e)} size={"small"}
                                    className={classes.searchInput} id="outlined-basic" label="Search"
                                    variant="outlined"/>
@@ -85,6 +91,8 @@ export const Cards = () => {
                     <CardListTable cardPacks={cardPacks} cardsTotalCount={cardsTotalCount} cardMaxGrade={cardMaxGrade}/>
                 </div>
             </Box>
-    )
+        )
+    }
+
 
 }

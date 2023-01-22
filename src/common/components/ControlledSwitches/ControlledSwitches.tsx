@@ -9,7 +9,8 @@ import {AppStateType} from "../../../app/store";
 import {useState} from "react";
 
 export function ControlledSwitches() {
-const dispatch = useDispatch()
+    console.log("contr switchers")
+    const dispatch = useDispatch()
     const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
     const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
     const userId = useSelector((state: AppStateType) => state.app.userId)

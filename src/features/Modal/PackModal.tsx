@@ -56,7 +56,6 @@ export function PackModal(props: any) {
                 <Box sx={style}>
                     <button className={classes.modalClose} onClick={onClickModalCloseHandler}>X</button>
                     <div className={classes.modalWrp}>
-
                         <Typography id="modal-modal-title" variant="h6" component="h2">
                             {props.name}
                         </Typography>
@@ -64,7 +63,7 @@ export function PackModal(props: any) {
                             <div className={classes.privateCheckbox}>
                                 <input type="checkbox" id={"privateCheckbox"} checked={isPackPrivate}
                                        onChange={onChangeInputPrivateHandler}/>
-                                <label htmlFor="privateCheckbox"> Hide</label>
+                                <label htmlFor="privateCheckbox"> Private</label>
                             </div>
                             <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"}
                                            value={newPackName} placeholder={props.placeholderName}/>

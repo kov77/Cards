@@ -13,6 +13,7 @@ import {
     setNewPackName, editPackTC
 } from '../Packs/packs-reducer';
 import Button from '@mui/material/Button';
+import classes from "./modal.module.css";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -58,13 +59,17 @@ export function EditModal(props: any) {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <button className={classes.modalClose} onClick={onClickModalCloseHandler}>X</button>
+
                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                        {"Edit Pack"}
+                        {"Edit Pack Name"}
                     </Typography>
-                    <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName}
-                                   placeholder={"Enter New Pack Name"}/>
-                    <Button onClick={saveBtnHandler} variant="contained">{"Save"}</Button>
-                    <button onClick={onClickModalCloseHandler}>X</button>
+                    <div className={classes.modalFields}>
+                        <OutlinedInput size={"small"} onChange={onChangeInputHandler} color={"primary"} value={newPackName}
+                                       placeholder={"Enter New Pack Name"}/>
+                        <Button onClick={saveBtnHandler} variant="contained">{"Save"}</Button>
+
+                    </div>
                 </Box>
             </Modal>
         </div>

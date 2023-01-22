@@ -12,6 +12,7 @@ import {Navigate, NavLink} from 'react-router-dom';
 import {useDispatch, useSelector} from "react-redux";
 import {restorePasswordTC} from "./recovery-reducer";
 import {AppStateType} from "../../app/store";
+import classes from "./Recovery.module.css"
 
 export const Recovery = () => {
     const dispatch = useDispatch()
@@ -78,14 +79,12 @@ link</a>
                                     Send link
                                 </Button>
                                 <Grid container>
-                                    <Grid item xs>
+                                    <Grid className={classes.buttonsContainer} item xs>
                                         <NavLink className={"navlink"} to="/registration">
-                                            {"Sign Up"}
+                                            <Button variant="outlined">Sign Up</Button>
                                         </NavLink>
-                                    </Grid>
-                                    <Grid item xs>
                                         <NavLink className={"navlink"} to="/login">
-                                            {"Login"}
+                                            <Button variant="outlined">Login</Button>
                                         </NavLink>
                                     </Grid>
                                 </Grid>

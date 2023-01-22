@@ -25,6 +25,7 @@ const App = () => {
         // @ts-ignore
         dispatch(initializeAppTC())
     }, [])
+    console.log("app")
 
     return (
         <BrowserRouter>
