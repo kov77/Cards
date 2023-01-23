@@ -43,7 +43,7 @@ link</a>
     return (
         <div>
             <ThemeProvider theme={theme}>
-                <Card sx={{minWidth: 275}}>
+                <Card sx={{minWidth: 275, minHeight: 320}}>
                     <Container component="main" maxWidth="xs">
                         <CssBaseline/>
                         <Box

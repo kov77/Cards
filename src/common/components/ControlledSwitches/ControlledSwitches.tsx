@@ -6,10 +6,9 @@ import classes from './ControlledSwitches.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import { fetchMyRangedPacksTC, rangePacks, setMaxCardsCount, setMinCardsCount} from "../../../features/Packs/packs-reducer";
 import {AppStateType} from "../../../app/store";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export function ControlledSwitches() {
-    console.log("contr switchers")
     const dispatch = useDispatch()
     const minValue = useSelector((state: AppStateType) => state.packs.minCardsCount)
     const maxValue = useSelector((state: AppStateType) => state.packs.maxCardsCount)
@@ -17,19 +16,19 @@ export function ControlledSwitches() {
     const pageCount = useSelector((state: AppStateType) => state.packs.pageCount)
     const page = useSelector((state: AppStateType) => state.packs.page)
 
-    let rangeValueFromLocalStorage = localStorage.getItem('rangeCountValue')
-    let switcherValueFromLocalStorage = JSON.parse(localStorage.getItem('switcher')!)
+    // let rangeValueFromLocalStorage = localStorage.getItem('rangeCountValue')
+    // let switcherValueFromLocalStorage = JSON.parse(localStorage.getItem('switcher')!)
 
-    if(rangeValueFromLocalStorage) {
-        dispatch(setMinCardsCount({minCardsCount: JSON.parse(rangeValueFromLocalStorage)[0]}))
-        dispatch(setMaxCardsCount({maxCardsCount: JSON.parse(rangeValueFromLocalStorage)[1]}))
-    }
-
-    const[checked, setChecked] = useState(switcherValueFromLocalStorage)
+    // if(rangeValueFromLocalStorage) {
+    //     dispatch(setMinCardsCount({minCardsCount: JSON.parse(rangeValueFromLocalStorage)[0]}))
+    //     dispatch(setMaxCardsCount({maxCardsCount: JSON.parse(rangeValueFromLocalStorage)[1]}))
+    // }
+    // const[checked, setChecked] = useState(switcherValueFromLocalStorage)
+    const[checked, setChecked] = useState(false)
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let value = event.currentTarget.checked
         setChecked(value)
-        localStorage.setItem('switcher', JSON.stringify(value))
+        // localStorage.setItem('switcher', JSON.stringify(value))
 
         if(value) {
             // @ts-ignore
@@ -38,9 +37,7 @@ export function ControlledSwitches() {
             // @ts-ignore
             dispatch(rangePacks(minValue, maxValue, pageCount, page))
         }
-
     };
-
 
     return (
         <FormGroup>

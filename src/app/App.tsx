@@ -15,7 +15,6 @@ import {RecoveryModal} from "../features/Recovery/RecoveryModal";
 import {useDispatch} from "react-redux";
 import { initializeAppTC } from './app-reducer';
 import {Cards} from "../features/Cards/Cards";
-import Container from '@mui/material/Container';
 
 const App = () => {
     const status = useAppSelector((state) => state.app.status )
@@ -25,7 +24,6 @@ const App = () => {
         // @ts-ignore
         dispatch(initializeAppTC())
     }, [])
-    console.log("app")
 
     return (
         <BrowserRouter>

@@ -78,7 +78,7 @@ export const Packs = () => {
 
     if (isModalActive) {
         return <PackModal style={{"position": "absolute"}} onClickBtnHandler={() => onClickAddPackHandler()}
-                          name={"Add New Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"}
+                          name={"Add Pack"} btnName={"Add Pack"} placeholderName={"Enter name of pack"}
                           open={true}/>
     } else {
         return (
@@ -97,7 +97,7 @@ export const Packs = () => {
                         <h5>PACKS RANGER</h5>
                         <RangeSlider/>
                     </div>
-                    <Button variant="contained" className={classes.addNewPackBtn} onClick={addButtonHandler}>Add new
+                    <Button variant="contained" className={classes.addNewPackBtn} onClick={addButtonHandler}>Add
                         Pack</Button>
                 </div>
 
